@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import TopicBox from '../components/TopicBox';
+import TopicCard from '../components/TopicCard';
 
 function Copyright() { return ( <Typography variant="body2" color="text.secondary" align="center"> {'Copyright © '} <Link color="inherit" href="https://mui.com/">
         Your Website
@@ -83,11 +83,11 @@ export default function Album() {
             </Stack>
           </Container>
         </Box>
-        <Container sx={{ py: 8 }} maxWidth="md">
+        <Container>
           {/* End hero unit */}
-          <Grid container spacing={4}>
+          <Grid container>
             {cardInfo.map((member) => (
-              <TopicBox card = {member} />
+              <TopicCard card={member}/>
             ))}
           </Grid>
         </Container>
