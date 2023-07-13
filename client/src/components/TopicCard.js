@@ -8,16 +8,16 @@ import Button from '@material-ui/core/Button';
 import TextInfoContent from '@mui-treasury/components/content/textInfo';
 import { useBlogTextInfoContentStyles } from '@mui-treasury/styles/textInfoContent/blog';
 import { useOverShadowStyles } from '@mui-treasury/styles/shadow/over';
-import { Grid } from '@mui/material';
+import { Chip, Grid } from '@mui/material';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
-    margin: 'auto',
+    margin: 10,
     borderRadius: spacing(2), // 16px
     transition: '0.3s',
     boxShadow: '0px 14px 80px rgba(34, 35, 58, 0.2)',
     position: 'relative',
-    maxWidth: 500,
+    maxWidth: 400,
     marginLeft: 'auto',
     overflow: 'initial',
     background: '#ffffff',
@@ -60,6 +60,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
   content: {
     padding: 24,
+    width: 20
   },
   cta: {
     marginTop: 24,
@@ -89,7 +90,9 @@ export default ({card}) => {
             'Git is a distributed version control system. Every dev has a working copy of the code and...'
           }
         />
-        <Button className={buttonStyles}>Read more</Button>
+        <Button size='small' className={buttonStyles}>View</Button>
+
+        <Chip>Hehe</Chip>
       </CardContent>
     </Card>
   );
