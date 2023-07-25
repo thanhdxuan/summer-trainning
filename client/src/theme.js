@@ -48,7 +48,7 @@ export const tokens = (mode) => ({
             800: "#5e4a13",
             900: "#2f2509"
          },
-         grey: {
+         whiteAccent: {
             100: "#fcfcfe",
             200: "#f9f9fd",
             300: "#f7f7fd",
@@ -62,7 +62,7 @@ export const tokens = (mode) => ({
       }:
       
       {
-         grey: {
+         primary: {
             100: "#222431",
             200: "#444762",
             300: "#656b93",
@@ -73,7 +73,7 @@ export const tokens = (mode) => ({
             800: "#dde0fb",
             900: "#eef0fd"
          },
-         primary: {
+         blackAccent: {
             100: "#0b0d12",
             200: "#151a25",
             300: "#202637",
@@ -132,7 +132,7 @@ export const themeSettings = (mode) => {
                   main: colors.primary[100]
                },
                secondary: {
-                  main: colors.grayAccent[500],
+                  main: colors.yellowAccent[800],
                },
                neutral: {
                   dark: colors.primary[700],
@@ -147,7 +147,7 @@ export const themeSettings = (mode) => {
                   main: colors.primary[100]
                },
                secondary: {
-                  main: colors.grayAccent[500],
+                  main: colors.yellowAccent[500],
                },
                neutral: {
                   dark: colors.primary[100],
@@ -155,7 +155,7 @@ export const themeSettings = (mode) => {
                   light: colors.primary[700],
                },
                background: {
-                  default: colors.primary[500]
+                  default: colors.primary[100]
                },
             }
          )
@@ -187,7 +187,8 @@ export const themeSettings = (mode) => {
            fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
            fontSize: 14,
          },
-       }
+      }
+
    };
 };
 
