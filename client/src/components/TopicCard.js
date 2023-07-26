@@ -92,7 +92,7 @@ export default ({card}) => {
         />
         <Button size='small' className={buttonStyles}>View</Button>
 
-        <Chip>Hehe</Chip>
+        <Chip label='Start' clickable></Chip>
       </CardContent>
     </Card>
   );
