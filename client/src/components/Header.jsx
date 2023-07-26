@@ -6,7 +6,7 @@ const Header = () => {
     const colors = tokens(theme.palette.mode)
     return (
          // Header
-        <Box>
+        <Box sx={{ pb: 2 }}>
             <Typography
                variant="h4"
                color={colors.blackAccent[800]}
