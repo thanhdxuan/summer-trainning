@@ -5,10 +5,9 @@ import { useTheme, IconButton } from '@mui/material';
 import { ColorModeContext, tokens } from '../../theme';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search'
-import "./styles.css"
-import { pink } from '@mui/material/colors';
 import Header from '../../components/Header';
 import SubjectCard from '../../components/SubjectCard';
+import './styles.css'
 
 const Home = () => {
    const theme = useTheme();
@@ -21,7 +20,7 @@ const Home = () => {
                pb: 6,
             }}
          >
-            <Container maxWidth='md'>
+            <Container maxWidth='lg'>
                <Box
                   sx={{ mr: 40, mb: 5 }}
                   justifyContent="center"
@@ -33,28 +32,28 @@ const Home = () => {
                      variant="h1"
                      color={colors.blackAccent[800]}
                      fontWeight='bold'
-                     >
+                  >
                      Find textbook solutions you can trust
                   </Typography>
                   <Typography
                      variant="h4"
                      color={colors.blackAccent[800]}
                      fontWeight='bold'
-                     >
+                  >
                      Step-by-step explanations
                   </Typography>
                   <Typography
                      variant="h4"
                      color={colors.blackAccent[800]}
                      fontWeight='bold'
-                     >
+                  >
                      Expert-written and verified answers
                   </Typography>
                   <Typography
                      variant="h4"
                      color={colors.blackAccent[800]}
                      fontWeight='bold'
-                     >
+                  >
                      Millions of solutions for popular textbooks
                   </Typography>
                   {/* Search bar */}
@@ -64,30 +63,41 @@ const Home = () => {
                   backgroundColor={colors.grayAccent[100]}
                   borderRadius="3px"
                   border='0.5px solid'
-                  borderColor={colors.whiteAccent[700]}
+                  borderColor={colors.grayAccent[600]}
                   height='50px'
                >
-                  <InputBase 
-                     sx={{ ml:2, flex:1 }}
-                     placeholder='Search'>Search Topics</InputBase>
+                  <InputBase
+                     sx={{
+                        ml: 2,
+                        flex: 1,
+                        '.MuiInputBase-input::placeholder':{
+                           color: colors.blackAccent[800],
+                           fontWeight: "bold"
+                        }
+                     }}
+                     placeholder='Find the topic'>Search Topics</InputBase>
                   <IconButton>
                      <SearchIcon></SearchIcon>
                   </IconButton>
                </Box>
             </Container>
          </Box>
-         <Box>
-            <Container maxWidth="md">
-               <Header />
-               <Grid container spacing={{ xs: 2, md: 3}} >
-                  {Array.from(Array(6)).map((_, index) => (
-                     <Grid item xs={3} sm={4} md={4} key={index}>
-                        <SubjectCard />
-                     </Grid>
-                  ))}
-               </Grid>
-            </Container>
-         </Box>
+         <Container maxWidth="lg">
+            <Header />
+            <Grid container 
+               spacing={{ xs: 2, md: 3 }}
+               columns={{ xs: 4, sm: 8, md: 12 }} 
+               sx={{ flexGrow: 1}}
+               flexGrow={1}
+               justifyContent="space-between"
+            >
+               {Array.from(Array(6)).map((_, index) => (
+                  <Grid item xs={6}>
+                     <SubjectCard />
+                  </Grid>
+               ))}
+            </Grid>
+         </Container>
       </Box>
    );
 }
