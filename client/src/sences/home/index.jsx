@@ -70,7 +70,7 @@ const Home = () => {
                      sx={{
                         ml: 2,
                         flex: 1,
-                        '.MuiInputBase-input::placeholder':{
+                        '.MuiInputBase-input::placeholder': {
                            color: colors.blackAccent[800],
                            fontWeight: "bold"
                         }
@@ -84,10 +84,10 @@ const Home = () => {
          </Box>
          <Container maxWidth="lg">
             <Header />
-            <Grid container 
+            <Grid container
                spacing={{ xs: 2, md: 3 }}
-               columns={{ xs: 4, sm: 8, md: 12 }} 
-               sx={{ flexGrow: 1}}
+               columns={{ xs: 4, sm: 8, md: 12 }}
+               sx={{ flexGrow: 1 }}
                flexGrow={1}
                justifyContent="space-between"
             >
