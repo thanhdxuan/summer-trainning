@@ -4,6 +4,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Topbar from './sences/global/TopBar.jsx';
 import Home from './sences/home'
+import PostsPage from './sences/posts'
 const App = () => {
   const [theme, colorMode] = useMode();
   return (
@@ -13,11 +14,10 @@ const App = () => {
         <div className='app'>
           <main className='content'>
             <Topbar/>
-            <Home/>
-            {/* <Routes>
-              <Route path="/" element= { <Home /> } />
-              <Route path="/" element= { <Home /> } />
-            </Routes> */}
+            <Routes>
+              <Route path="/home" element= { <Home /> } />
+              <Route path="/posts" element= { <PostsPage /> } />
+            </Routes>
           </main>
         </div> 
       </ThemeProvider>
