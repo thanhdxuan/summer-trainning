@@ -1,8 +1,27 @@
 import React from 'react'
-import Album from './model/Album.js'
+import { ColorModeContext, useMode } from './theme.js';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
+import Topbar from './sences/global/TopBar.jsx';
+import Home from './sences/home'
+import PostsPage from './sences/posts'
 const App = () => {
+  const [theme, colorMode] = useMode();
   return (
-     <Album /> 
-  )
+    <ColorModeContext.Provider value={ colorMode }>
+      <ThemeProvider theme={ theme }>
+        <CssBaseline/>
+        <div className='app'>
+          <main className='content'>
+            <Topbar/>
+            <Routes>
+              <Route path="/home" element= { <Home /> } />
+              <Route path="/posts" element= { <PostsPage /> } />
+            </Routes>
+          </main>
+        </div> 
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
 }
 export default App

@@ -84,7 +84,7 @@ export default ({card}) => {
       <CardContent>
         <TextInfoContent
           classes={contentStyles}
-          overline={'28 MAR 2019'}
+          overline={'Created at: 28 MAR 2019'}
           heading={card.title}
           body={
             'Git is a distributed version control system. Every dev has a working copy of the code and...'
