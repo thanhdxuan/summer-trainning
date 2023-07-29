@@ -4,10 +4,12 @@ import Typography from '@mui/material/Typography';
 import { tokens } from '../theme';
 import { Chip } from '@mui/material';
 import LinearProgressWithLabel from '../sences/posts/components/LinearProgressWithLabel';
+import { useNavigate } from 'react-router-dom';
 
 const SubjectCard = ({ cardInfo }) => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
+   const navigate = useNavigate();
    return (
       <Box
          display="flex"
@@ -21,6 +23,8 @@ const SubjectCard = ({ cardInfo }) => {
                boxShadow: "inset 0px -3px 1px 0px #b0b4fc",
             }
          }}
+         onClick={() => navigate('/posts')}
+
       >
          <Box sx={{ mx: 2, my: 2 }} width="50%">
             <img
