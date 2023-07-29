@@ -15,7 +15,7 @@ const App = () => {
           <main className='content'>
             <Topbar/>
             <Routes>
-              <Route path="/home" element= { <Home /> } />
+              <Route path="/" element= { <Home /> } />
               <Route path="/posts" element= { <PostsPage /> } />
             </Routes>
           </main>
