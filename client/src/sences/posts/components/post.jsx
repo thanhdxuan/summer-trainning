@@ -3,6 +3,8 @@ import { useTheme, Box, Typography, Paper, Stack, Chip, Avatar, Divider, Button 
 import { tokens } from '../../../theme';
 import LinearProgressWithLabel from './LinearProgressWithLabel';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import ScrollDialog from './Questions';
+import ListQuestions from './Questions';
 
 const Post = ({ postInfor }) => {
    const theme = useTheme();
@@ -86,10 +88,7 @@ const Post = ({ postInfor }) => {
                {postInfor['content']}
             </Typography>
             <Box sx={{ my: 2 }}>
-               <Button color="secondary" size="large" variant='outlined'>
-                  Answer Questions
-                  <KeyboardArrowRight />
-               </Button>
+               <ListQuestions />
             </Box>
          </Box>
       </Box>

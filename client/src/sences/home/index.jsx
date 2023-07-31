@@ -93,7 +93,7 @@ const Home = () => {
             >
                {Array.from(Array(6)).map((_, index) => (
                   <Grid item xs={6}>
-                     <SubjectCard />
+                     <SubjectCard key={index} />
                   </Grid>
                ))}
             </Grid>
