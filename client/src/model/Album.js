@@ -44,7 +44,7 @@ export default function Album() {
       <AppBar position="relative">
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            Album layout
+            Summaining
           </Typography>
         </Toolbar>
       </AppBar>
@@ -65,7 +65,7 @@ export default function Album() {
               color="text.primary"
               gutterBottom
             >
-              Album layout
+              Summaining
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               Something short and leading about the collection below—its contents,
