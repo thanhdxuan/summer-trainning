@@ -1,5 +1,4 @@
 import { Box, useTheme, Paper, Grid, Button } from '@mui/material';
-import { red } from '@mui/material/colors';
 import Typography from '@mui/material/Typography';
 import { tokens } from '../theme';
 import { Chip } from '@mui/material';
@@ -24,7 +23,6 @@ const SubjectCard = ({ cardInfo }) => {
             }
          }}
          onClick={() => navigate('/posts')}
-
       >
          <Box sx={{ mx: 2, my: 2 }} width="50%">
             <img
