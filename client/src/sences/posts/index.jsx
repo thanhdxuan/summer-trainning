@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 
 const posts_data = [
    {
+      id: 1,
       title: "Display Images In React",
       banner: "images/image.svg",
       description: "There are several ways to import and use images in React. Sometimes, it seems not to work, and we will see why.",
@@ -29,6 +30,7 @@ const posts_data = [
    },
 
    {
+      id: 2,
       title: "Trump aide Carlos De Oliveira’s journey from failed witness to defendant",
       banner: "images/image.svg",
       description: "A proffer session gone sour leads to an indictment, underscoring investigators’ hopes and fears about Trump staffers",
@@ -46,6 +48,7 @@ const posts_data = [
    },
 
    {
+      id: 3,
       title: "Display Images In React - 2",
       banner: "images/image.svg",
       description: "There are several ways to import and use images in React. Sometimes, it seems not to work, and we will see why.",
