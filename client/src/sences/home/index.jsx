@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Button, Stack, Container, Grid } from "@mui/material";
@@ -12,6 +13,21 @@ import './styles.css'
 const Home = () => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
+   const [topics, setTopics] = useState([]);
+
+
+   useEffect(
+      () => {
+         fetch('/topics')
+            .then(res => res.json())
+            .then(data => {
+               setTopics(data)
+            })
+            .catch(err => console.log(err))
+      }, []
+   );
+
+
    return (
       <Box>
          <Box
@@ -91,9 +107,9 @@ const Home = () => {
                flexGrow={1}
                justifyContent="space-between"
             >
-               {Array.from(Array(6)).map((_, index) => (
-                  <Grid item xs={6}>
-                     <SubjectCard key={index} />
+               {topics.map((_, index) => (
+                  <Grid item xs={6} key={index + 10}>
+                     <SubjectCard key={index} cardInfo={topics[index]} />
                   </Grid>
                ))}
             </Grid>

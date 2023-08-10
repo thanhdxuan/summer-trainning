@@ -9,6 +9,18 @@ const SubjectCard = ({ cardInfo }) => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
    const navigate = useNavigate();
+
+   const label = [
+      'Easy',
+      'Medium',
+      'Hard'
+   ]
+
+   const label_color = [
+      'success',
+      'warning',
+      'error'
+   ]
    return (
       <Box
          display="flex"
@@ -26,19 +38,18 @@ const SubjectCard = ({ cardInfo }) => {
       >
          <Box sx={{ mx: 2, my: 2 }} width="50%">
             <img
-               src="/images/animals_1.svg"
+               src={cardInfo['thumbnail']}
                style={{
                   borderRadius: 15,
-                  display: 'block',
                   width: '100%',
                }}
-               loading="lazy"
+               // loading="lazy"
             />
          </Box>
          <Box sx={{ my: 2 }} display="flex" flexDirection="column" justifyContent="space-between">
             <Box>
                <Box fontSize={{ xs: 15, md: 20 }} fontWeight="bold">
-                  Chemistry: The Central Science
+                  {cardInfo['name']}
                </Box>
                <Box sx={{ pr: 2 }}>
                   <Typography
@@ -60,7 +71,7 @@ const SubjectCard = ({ cardInfo }) => {
                   </Box>
                </Box>
                <Box display="flex" sx={{ mt: 1 }} gap={1}>
-                  <Chip label="Easy" size='small' />
+                  <Chip label={label[cardInfo['level'] - 1]} size='small' color={label_color[cardInfo['level'] - 1]} />
                   <Chip label="Number of post" size='small' />
                   {/* <Box sx={{ pl: 15 }}>
                   <Button variant='outlined' color='info'>View</Button>
