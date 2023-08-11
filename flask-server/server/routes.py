@@ -1,38 +1,67 @@
-from flask_sqlalchemy import SQLAlchemy
-from flask import jsonify, send_file
+from flask import jsonify, send_file, request
 from server import app
-import psycopg2
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://thanhdxn@127.0.0.1:5432/tranning-website'
-db = SQLAlchemy(app)
-
-class Topics(db.Model):
-    topic_id = db.Column(db.Integer(), primary_key=True)
-    topic_name = db.Column(db.String(), nullable=False)
-    topic_level = db.Column(db.Integer(), nullable=False)
-    thumbnail = db.Column(db.String(), nullable=False)
+from server.models import Topics, Posts, Question, Tests, Users
 
 @app.route("/topics", methods=['GET'])
 def get_topic():
     # conn = psycopg2.connect(database="tranning-website", user="thanhdxn",
     #                     password="", host="127.0.0.1", port="5432")
     
-    topics = Topics.query.all()
+    topics = Topics.query.order_by(Topics._id).all()
     topic_list = []
 
     for topic in topics:
         topic_data = {
-            'id': topic.topic_id,
-            'name': topic.topic_name,
-            'level': topic.topic_level,
-            'thumbnail': topic.thumbnail
+            'id': topic._id,
+            'name': topic.name,
+            'level': topic.level,
+            'thumbnail': topic.thumbnail,
+            'num_posts': topic.get_number_of_posts()
         }
         topic_list.append(topic_data)
     return jsonify(topic_list)
 
-@app.route('/images/<filename>')
-def get_image(filename):
-    # Assuming the images are stored in a folder named 'images'
-    image_path = f'public/images/{filename}'
+@app.route("/search/topics", methods=['GET'])
+def get_topic_have_token():
+    topics = Topics.query.order_by(Topics._id).all()
+    topic_list = []
 
-    return send_file(image_path, mimetype='image/svg+xml')
+    token = request.args.get('name')
+    level = request.args.get('level')
+
+    for topic in topics:
+        if token is not None and token.lower() in topic.name.lower():
+            topic_data = {
+                'id': topic._id,
+                'name': topic.name,
+                'level': topic.level,
+                'thumbnail': topic.thumbnail,
+                'num_posts': topic.get_number_of_posts()
+            }
+            topic_list.append(topic_data)
+
+    
+    return jsonify(topic_list)
+
+@app.route("/topics/<topic_id>/posts")
+def get_all_posts_from_topic_id(topic_id):
+    posts = Posts.query.filter_by(topic_id=topic_id).all()
+    
+    return jsonify(posts)
+
+@app.route('/images/<typ>/<filename>')
+def get_image(typ, filename):
+    image_path = f'public/images/{typ}/{filename}'
+
+    if typ == 'topics':
+        res = send_file(image_path, mimetype='image/svg+xml')
+    elif typ == 'posts':
+        res = send_file(image_path, mimetype='image/jpg')
+    return res
+    
+
+@app.route('/topics/<topicId>/images/posts/<filename>')
+def get_image_for_posts(topicId, filename):
+    image_path = f'public/images/posts/{filename}'
+    res = send_file(image_path, mimetype='image/jpg')
+    return res
