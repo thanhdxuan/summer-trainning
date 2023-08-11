@@ -1,3 +1,9 @@
 /flask-server/venv
 /front-end/node_modules
-__pycache__/*
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyw
