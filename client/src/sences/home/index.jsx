@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Button, Stack, Container, Grid } from "@mui/material";
-import { useTheme, IconButton } from '@mui/material';
-import { ColorModeContext, tokens } from '../../theme';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search'
+import { Container, Grid } from "@mui/material";
+import { useTheme } from '@mui/material';
+import { tokens } from '../../theme';
 import Header from '../../components/Header';
 import SubjectCard from '../../components/SubjectCard';
 import './styles.css'
+import SearchBar from './components/SearchBar';
 
 const Home = () => {
    const theme = useTheme();
@@ -27,6 +26,14 @@ const Home = () => {
       }, []
    );
 
+   const handleSearch = (searchTerm) => {
+      fetch(`/search/topics?name=${searchTerm}`)
+         .then(res => res.json())
+         .then(data => {
+            setTopics(data)
+         })
+         .catch(err => console.log(err))
+   };
 
    return (
       <Box>
@@ -74,28 +81,7 @@ const Home = () => {
                   </Typography>
                   {/* Search bar */}
                </Box>
-               <Box
-                  display="flex"
-                  backgroundColor={colors.grayAccent[100]}
-                  borderRadius="3px"
-                  border='0.5px solid'
-                  borderColor={colors.grayAccent[600]}
-                  height='50px'
-               >
-                  <InputBase
-                     sx={{
-                        ml: 2,
-                        flex: 1,
-                        '.MuiInputBase-input::placeholder': {
-                           color: colors.blackAccent[800],
-                           fontWeight: "bold"
-                        }
-                     }}
-                     placeholder='Find the topic'>Search Topics</InputBase>
-                  <IconButton>
-                     <SearchIcon></SearchIcon>
-                  </IconButton>
-               </Box>
+               <SearchBar onSearch={handleSearch} />
             </Container>
          </Box>
          <Container maxWidth="lg">
