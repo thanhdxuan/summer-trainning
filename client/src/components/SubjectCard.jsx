@@ -34,7 +34,7 @@ const SubjectCard = ({ cardInfo }) => {
                boxShadow: "inset 0px -3px 1px 0px #b0b4fc",
             }
          }}
-         onClick={() => navigate('/posts')}
+         onClick={() => navigate(`/topics/${cardInfo['id']}/posts`)}
       >
          <Box sx={{ mx: 2, my: 2 }} width="50%">
             <img
@@ -43,7 +43,7 @@ const SubjectCard = ({ cardInfo }) => {
                   borderRadius: 15,
                   width: '100%',
                }}
-               // loading="lazy"
+               loading="lazy"
             />
          </Box>
          <Box sx={{ my: 2 }} display="flex" flexDirection="column" justifyContent="space-between">
@@ -72,7 +72,7 @@ const SubjectCard = ({ cardInfo }) => {
                </Box>
                <Box display="flex" sx={{ mt: 1 }} gap={1}>
                   <Chip label={label[cardInfo['level'] - 1]} size='small' color={label_color[cardInfo['level'] - 1]} />
-                  <Chip label="Number of post" size='small' />
+                  <Chip label={`${cardInfo['num_posts']} posts`} size='small' />
                   {/* <Box sx={{ pl: 15 }}>
                   <Button variant='outlined' color='info'>View</Button>
                </Box> */}

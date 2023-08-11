@@ -16,7 +16,7 @@ const App = () => {
             <Topbar/>
             <Routes>
               <Route path="/" element= { <Home /> } />
-              <Route path="/posts" element= { <PostsPage /> } />
+              <Route path="/topics/:topicId/posts" element= { <PostsPage /> } />
             </Routes>
           </main>
         </div> 

@@ -1,9 +1,5 @@
-import { useState } from 'react';
 import { useTheme, Box, Typography, Paper, Stack, Chip, Avatar, Divider, Button } from '@mui/material';
 import { tokens } from '../../../theme';
-import LinearProgressWithLabel from './LinearProgressWithLabel';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import ScrollDialog from './Questions';
 import ListQuestions from './Questions';
 
 const Post = ({ postInfor }) => {
@@ -16,7 +12,7 @@ const Post = ({ postInfor }) => {
          <Box display="flex">
             {/* Thumbnail */}
             <img
-               src="https://source.unsplash.com/random?wallpapers"
+               src={postInfor['banner']}
                style={{
                   width: 600,
                   height: 400,
@@ -36,7 +32,7 @@ const Post = ({ postInfor }) => {
 
                   <Stack direction="row" spacing={1} sx={{ my: 1 }}>
                      {
-                        Array.from(postInfor['key_word']).map((value, index) => (
+                        Array.from(['haha', 'temp']).map((value, index) => (
                            <Chip label={'#' + value} key={index} size="small" />
                         ))
                      }
