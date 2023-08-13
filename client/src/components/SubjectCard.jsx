@@ -1,4 +1,4 @@
-import { Box, useTheme, Paper, Grid, Button } from '@mui/material';
+import { Box, useTheme, Paper, Grid, Button, Link } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { tokens } from '../theme';
 import { Chip } from '@mui/material';
@@ -34,7 +34,7 @@ const SubjectCard = ({ cardInfo }) => {
                boxShadow: "inset 0px -3px 1px 0px #b0b4fc",
             }
          }}
-         onClick={() => navigate(`/topics/${cardInfo['id']}/posts`)}
+         // onClick={() => navigate(`/topics/${cardInfo['id']}/posts`)}
       >
          <Box sx={{ mx: 2, my: 2 }} width="50%">
             <img
@@ -49,7 +49,9 @@ const SubjectCard = ({ cardInfo }) => {
          <Box sx={{ my: 2 }} display="flex" flexDirection="column" justifyContent="space-between">
             <Box>
                <Box fontSize={{ xs: 15, md: 20 }} fontWeight="bold">
-                  {cardInfo['name']}
+                  <Link underline='hover' href={`/topics/${cardInfo['id']}/posts`} color='inherit'>
+                     {cardInfo['name']}
+                  </Link>
                </Box>
                <Box sx={{ pr: 2 }}>
                   <Typography

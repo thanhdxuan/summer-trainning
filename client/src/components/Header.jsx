@@ -11,7 +11,7 @@ const Header = () => {
                variant="h4"
                color={colors.blackAccent[800]}
                fontWeight="bold"
-            >Browse exam</Typography>
+            >Browse topics</Typography>
         </Box>
     )
 }
