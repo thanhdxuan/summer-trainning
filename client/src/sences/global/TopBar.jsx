@@ -1,4 +1,4 @@
-import { Box, IconButton, useTheme } from '@mui/material';
+import { Box, IconButton, useTheme} from '@mui/material';
 import { useContext } from 'react';
 import { ColorModeContext, tokens } from '../../theme';
 
@@ -15,27 +15,34 @@ const Topbar = () => {
    const colorMode = useContext(ColorModeContext);
 
    return (
-   <Box display="flex" justifyContent="space-between" p={2}>
-      {/* ICONS */}
-      <Box display="flex">
-         <IconButton onClick={colorMode.toggleColorMode}>
-            {theme.palette.mode === 'dark' ? (
-               <DarkModeOutlinedIcon></DarkModeOutlinedIcon>
-            ) : (
-               <LightModeOutlinedIcon></LightModeOutlinedIcon>
-            )}
-         </IconButton>
-         <IconButton>
-            <NotificationsOutlinedIcon/>
-         </IconButton>
-         <IconButton>
-            <PersionOutlinedIcon/>
-         </IconButton>
-         <IconButton>
-            <SettingsOutlinedIcon/>
-         </IconButton>
+      <Box display="flex" justifyContent="space-between" p={2} alignItems="center">
+         {/* ICONS */}
+         <Box display="flex"> <IconButton onClick={colorMode.toggleColorMode}>
+               {theme.palette.mode === 'dark' ? (
+                  <DarkModeOutlinedIcon></DarkModeOutlinedIcon>
+               ) : (
+                  <LightModeOutlinedIcon></LightModeOutlinedIcon>
+               )}
+            </IconButton>
+            <IconButton>
+               <NotificationsOutlinedIcon />
+            </IconButton>
+            <IconButton>
+               <PersionOutlinedIcon />
+            </IconButton>
+            <IconButton>
+               <SettingsOutlinedIcon />
+            </IconButton>
+         </Box>
+         <Box display="flex">
+            <img
+               src='/images/logo/light-removebg.png'
+               style={{
+                  height: 40
+               }}
+            />
+         </Box>
       </Box>
-   </Box>
    );
 
 }
