@@ -120,3 +120,7 @@ ADD
         topic_level > 0
         AND topic_level < 4
     );
+
+ALTER TABLE "topics"
+ADD
+    COLUMN "description" VARCHAR(255) NOT NULL DEFAULT 'Lorem Ipsum is simply dummynd typesetting industry................';

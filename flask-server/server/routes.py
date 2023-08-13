@@ -16,6 +16,7 @@ def get_topic():
             'name': topic.name,
             'level': topic.level,
             'thumbnail': topic.thumbnail,
+            'description': topic.description,
             'num_posts': topic.get_number_of_posts()
         }
         topic_list.append(topic_data)

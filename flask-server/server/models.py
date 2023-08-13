@@ -13,11 +13,13 @@ class Topics(db.Model):
     name: str
     level: int
     thumbnail: str
+    description: str
 
     _id = db.Column("topic_id", db.Integer(), primary_key=True)
     name = db.Column("topic_name", db.String(), nullable=False)
     level = db.Column("topic_level", db.Integer(), nullable=False)
     thumbnail = db.Column("thumbnail", db.String(), nullable=False)
+    description = db.Column("description", db.String(), nullable=False)
 
     def get_number_of_posts(self):
         return len(Posts.query.filter_by(topic_id=self._id).all())
