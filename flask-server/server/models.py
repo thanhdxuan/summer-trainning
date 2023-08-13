@@ -7,7 +7,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://thanhdxn@127.0.0.1:5432/tr
 
 db = SQLAlchemy(app)
 
+@dataclass
 class Topics(db.Model):
+    _id: int
+    name: str
+    level: int
+    thumbnail: str
+
     _id = db.Column("topic_id", db.Integer(), primary_key=True)
     name = db.Column("topic_name", db.String(), nullable=False)
     level = db.Column("topic_level", db.Integer(), nullable=False)

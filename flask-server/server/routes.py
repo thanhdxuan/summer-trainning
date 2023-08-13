@@ -46,17 +46,23 @@ def get_topic_have_token():
 @app.route("/topics/<topic_id>/posts")
 def get_all_posts_from_topic_id(topic_id):
     posts = Posts.query.filter_by(topic_id=topic_id).all()
-    
-    return jsonify(posts)
+    topic = Topics.query.filter_by(_id=topic_id).all()
+
+    infor = {
+        "topic_name": topic[0].name,
+        "posts": posts
+    }
+
+    return jsonify(infor)
 
 @app.route('/images/<typ>/<filename>')
 def get_image(typ, filename):
     image_path = f'public/images/{typ}/{filename}'
 
-    if typ == 'topics':
+    if typ in ['topics']:
         res = send_file(image_path, mimetype='image/svg+xml')
-    elif typ == 'posts':
-        res = send_file(image_path, mimetype='image/jpg')
+    elif typ in ['logo', 'general']:
+        res = send_file(image_path, mimetype='image/png')
     return res
     
 
