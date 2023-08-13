@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import NoPost from './components/NoPost';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
+import NavigateBar from '../global/NavigateBar';
 
 
 
@@ -31,10 +32,6 @@ const PostsPage = ({ topicInfor }) => {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
    };
 
-   const handleClickBar = (event) => {
-      event.preventDefault();
-
-   };
 
    useEffect(
       () => {
@@ -49,35 +46,10 @@ const PostsPage = ({ topicInfor }) => {
       }, []
    );
 
-   const breadcrumbs = [
-      <Link underline="hover" key="1" color="inherit" href="/">
-         Home
-      </Link>,
-      <Link
-         underline="none"
-         key="2"
-         color="inherit"
-         onClick={handleClickBar}
-      >
-         {topicName}
-      </Link>,
-      <Typography key="3" color="text.primary">
-         Posts
-      </Typography>,
-   ];
 
    return <Container maxWidth='lg'>
       {/* Navigate bar */}
-      <Box sx={{ my: 2 }}>
-         <Stack spacing={2}>
-            <Breadcrumbs
-               separator={<NavigateNextIcon fontSize="small" />}
-               aria-label="breadcrumb"
-            >
-               {breadcrumbs}
-            </Breadcrumbs>
-         </Stack>
-      </Box>
+      <NavigateBar pathInfor={[['Home', '/'], [topicName, '/'], ['Posts', '']]} />
       {
          (posts_data.length != 0) ?
             <>
