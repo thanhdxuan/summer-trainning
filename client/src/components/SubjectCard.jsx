@@ -36,12 +36,13 @@ const SubjectCard = ({ cardInfo }) => {
          }}
          // onClick={() => navigate(`/topics/${cardInfo['id']}/posts`)}
       >
-         <Box sx={{ mx: 2, my: 2 }} width="50%">
+         <Box sx={{ mx: 2, my: 2 }}>
             <img
                src={cardInfo['thumbnail']}
                style={{
                   borderRadius: 15,
                   width: '100%',
+                  height: 200
                }}
                loading="lazy"
             />
@@ -57,7 +58,7 @@ const SubjectCard = ({ cardInfo }) => {
                   <Typography
                      variant='h6'
                   >
-                     Lorem Ipsum is simply dummynd typesetting industry................
+                     {cardInfo['description']}
                   </Typography>
                </Box>
             </Box>
