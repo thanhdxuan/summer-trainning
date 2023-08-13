@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import Topbar from './sences/global/TopBar.jsx';
 import Home from './sences/home'
 import PostsPage from './sences/posts'
+import AdminPanel from './sences/admin/index.jsx';
 const App = () => {
   const [theme, colorMode] = useMode();
   return (
@@ -19,6 +20,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/topics/:topicId/posts" element={<PostsPage />} />
+              <Route path="/admin" element={<AdminPanel />} />
             </Routes>
           </main>
         </div>
