@@ -124,3 +124,7 @@ ADD
 ALTER TABLE "topics"
 ADD
     COLUMN "description" VARCHAR(255) NOT NULL DEFAULT 'Lorem Ipsum is simply dummynd typesetting industry................';
+
+ALTER TABLE "users" ADD COLUMN "public_id" VARCHAR(255) UNIQUE;
+ALTER TABLE "users" ALTER COLUMN "is_active" SET DEFAULT FALSE;
+ALTER TABLE "users" ALTER COLUMN "is_admin" SET DEFAULT FALSE;
