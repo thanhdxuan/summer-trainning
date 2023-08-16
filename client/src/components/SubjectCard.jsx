@@ -34,7 +34,6 @@ const SubjectCard = ({ cardInfo }) => {
                boxShadow: "inset 0px -3px 1px 0px #b0b4fc",
             }
          }}
-         // onClick={() => navigate(`/topics/${cardInfo['id']}/posts`)}
       >
          <Box sx={{ mx: 2, my: 2 }}>
             <img
@@ -49,10 +48,18 @@ const SubjectCard = ({ cardInfo }) => {
          </Box>
          <Box sx={{ my: 2 }} display="flex" flexDirection="column" justifyContent="space-between">
             <Box>
-               <Box fontSize={{ xs: 15, md: 20 }} fontWeight="bold">
-                  <Link underline='hover' href={`/topics/${cardInfo['id']}/posts`} color='inherit'>
-                     {cardInfo['name']}
-                  </Link>
+               <Box
+                  fontSize={{ xs: 15, md: 20 }}
+                  fontWeight="bold"
+                  onClick={() => navigate(`/topics/${cardInfo['id']}/posts`)}
+                  sx={{
+                     '&:hover': {
+                        backgroundColor: 'primary',
+                        opacity: [0.9, 0.8, 0.7],
+                     }
+                  }}
+               >
+                  {cardInfo['name']}
                </Box>
                <Box sx={{ pr: 2 }}>
                   <Typography
