@@ -1,13 +1,22 @@
 import { Link, Typography, Box, Stack, Breadcrumbs } from "@mui/material";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useNavigate } from "react-router-dom";
 
 const NavigateBar = ({ pathInfor }) => {
+   const navigate = useNavigate();
    const iter = Array.from(pathInfor).map((value, index) => (
       value[1] != ''
          ?
-         <Link underline="hover" href={value[1]} key={index} color='inherit'>
+         <Typography underline="hover" href={value[1]} key={index} color='inherit'
+            onClick={() => navigate(value[1])}
+            sx={{
+               '&:hover': {
+                  cursor: 'pointer'
+               }
+            }}
+         >
             {value[0]}
-         </Link>
+         </Typography>
          :
          <Typography key={index} color="text.primary">
             {value[0]}
