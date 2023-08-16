@@ -52,8 +52,21 @@ class Question(db.Model):
     op_d = db.Column(db.String(), nullable=False)
     answer = db.Column("ans", db.Integer(), nullable=False)
 
+@dataclass
 class Users(db.Model):
+    _id: int
+    public_id: str
+    username: str
+    email: str
+    password: str
+    created_date: str
+    is_active: bool
+    is_admin: bool
+    avatar: str
+
+
     _id = db.Column("uuid", db.Integer(), primary_key=True)
+    public_id = db.Column(db.String(50), unique = True)
     username = db.Column("username", db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False)
     password = db.Column("passwrd", db.String())
@@ -61,6 +74,10 @@ class Users(db.Model):
     is_active = db.Column(db.Boolean())
     is_admin = db.Column(db.Boolean())
     avatar = db.Column("u_avatar", db.String())
+
+    def add_new_user(new_user):
+        db.session.add(new_user)
+        db.session.commit()
 
 class Tests(db.Model):
     _id = db.Column("test_id", db.Integer(), primary_key=True)
