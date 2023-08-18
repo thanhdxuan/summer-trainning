@@ -9,26 +9,35 @@ import SubjectCard from '../../components/SubjectCard';
 import './styles.css'
 import SearchBar from './components/SearchBar';
 import Topbar from '../global/TopBar';
+import axios from 'axios';
 
-const Home = ({ }) => {
+const Home = () => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
    const [topics, setTopics] = useState([]);
+   const [userData, setUserData] = useState([]);
    const user = JSON.parse(sessionStorage.getItem("user"));
    const header = {
       'headers': {
          "x-access-token": user.token
       }
-   } 
+   }
+   const getTopicData = async () => {
+      return axios
+         .get(`/topics`, header)
+         .then((res) => res.data);
+   };
+   const getUserData = async () => {
+      return axios
+         .get(`/users/${user.uid}/status`, header)
+         .then((res) => res.data);
+   };
 
+   // eslint-disable-next-line
    useEffect(
       () => {
-         fetch(`/topics`, header)
-            .then(res => res.json())
-            .then(data => {
-               setTopics(data)
-            })
-            .catch(err => console.log(err))
+         getTopicData().then((data) => setTopics(data));
+         getUserData().then((data) => setUserData(data));
       }, []
    );
 
@@ -104,9 +113,9 @@ const Home = ({ }) => {
                >
                   {
                      topics.length > 0 ? (topics.map((_, index) => (
-                     <Grid item xs={6} key={index + 10}>
-                        <SubjectCard key={index} cardInfo={topics[index]} />
-                     </Grid>
+                        <Grid item xs={6} key={index + 10}>
+                           <SubjectCard key={index} cardInfo={topics[index]} userData={userData[topics[index]['id']]} />
+                        </Grid>
                      ))) : <div></div>
                   }
 
