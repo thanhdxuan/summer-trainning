@@ -53,4 +53,25 @@ SELECT GENERATE_TEST_FOR_POST(5, 1);
 
 --- # NOTE: Function to make a test
 
+--- # NOTE: 
+CREATE OR REPLACE FUNCTION get_passed_post_count_by_user(user_id INT)
+RETURNS TABLE (
+  topic_id INT,
+  topic_name VARCHAR(255),
+  uuid INT,
+  passed_post_count INT
+)
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT t.topic_id, t.topic_name, pt.uuid, COUNT(pt.post_id)::INT AS passed_post_count
+  FROM topics t
+  JOIN posts p ON t.topic_id = p.topic_id
+  JOIN tests pt ON p.post_id = pt.post_id
+  WHERE pt.passed = true AND pt.uuid = user_id
+  GROUP BY t.topic_id, t.topic_name, pt.uuid;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP Function get_passed_post_count_by_user;
 
