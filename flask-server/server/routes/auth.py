@@ -1,12 +1,12 @@
-from flask import jsonify, send_file, request, make_response
 from server import app
-from server.models import Topics, Posts, Question, Tests, Users
+from flask import request, make_response, jsonify
 from  werkzeug.security import generate_password_hash, check_password_hash
-import uuid
-import jwt
+from server.models import Users
+import datetime
 from datetime import datetime, timedelta, timezone
+import jwt
+import uuid
 from functools import wraps
-
 
 def token_required(f):
     @wraps(f)
@@ -33,79 +33,6 @@ def token_required(f):
         return  f(current_user, *args, **kwargs)
   
     return decorated
-
-@app.route("/topics", methods=['GET'])
-@token_required
-def get_topic(token):
-    # conn = psycopg2.connect(database="tranning-website", user="thanhdxn",
-    #                     password="", host="127.0.0.1", port="5432")
-    
-    topics = Topics.query.order_by(Topics._id).all()
-    topic_list = []
-
-    for topic in topics:
-        topic_data = {
-            'id': topic._id,
-            'name': topic.name,
-            'level': topic.level,
-            'thumbnail': topic.thumbnail,
-            'description': topic.description,
-            'num_posts': topic.get_number_of_posts()
-        }
-        topic_list.append(topic_data)
-    return jsonify(topic_list)
-
-@app.route("/search/topics", methods=['GET'])
-def get_topic_have_token():
-    topics = Topics.query.order_by(Topics._id).all()
-    topic_list = []
-
-    token = request.args.get('name')
-    level = request.args.get('level')
-
-    for topic in topics:
-        if token is not None and token.lower() in topic.name.lower():
-            topic_data = {
-                'id': topic._id,
-                'name': topic.name,
-                'level': topic.level,
-                'thumbnail': topic.thumbnail,
-                'num_posts': topic.get_number_of_posts()
-            }
-            topic_list.append(topic_data)
-
-    
-    return jsonify(topic_list)
-
-@app.route("/topics/<topic_id>/posts")
-def get_all_posts_from_topic_id(topic_id):
-    posts = Posts.query.filter_by(topic_id=topic_id).all()
-    topic = Topics.query.filter_by(_id=topic_id).all()
-
-    infor = {
-        "topic_name": topic[0].name,
-        "posts": posts
-    }
-
-    return jsonify(infor)
-
-@app.route('/images/<typ>/<filename>')
-def get_image(typ, filename):
-    image_path = f'public/images/{typ}/{filename}'
-
-    if typ in ['topics']:
-        res = send_file(image_path, mimetype='image/svg+xml')
-    elif typ in ['logo', 'general']:
-        res = send_file(image_path, mimetype='image/png')
-    return res
-    
-
-@app.route('/topics/<topicId>/images/posts/<filename>')
-def get_image_for_posts(topicId, filename):
-    image_path = f'public/images/posts/{filename}'
-    res = send_file(image_path, mimetype='image/jpg')
-    return res
-
 @app.route("/users/login", methods=['POST'])
 def login():
     auth = request.form
@@ -126,6 +53,7 @@ def login():
         return make_response(
             jsonify({
             'username': user.username,
+            'uid': user.public_id,
             'email': user.email,
             'is_admin': user.is_admin,
             'is_active': user.is_active,
@@ -140,7 +68,7 @@ def login():
     )
 
 @app.route("/users/signup", methods =['POST'])
-def signup():
+def sign_up():
     # creates a dictionary of the form data
     data = request.form
   
@@ -173,3 +101,13 @@ def signup():
     else:
         # returns 202 if user already exists
         return make_response('User already exists. Please Log in.', 202)
+
+@app.route("/users/activate", methods=['POST'])
+def activate_user():
+    data = request.form
+
+    public_id = data.get('public_id')
+    Users.activate(public_id=public_id)
+    return make_response("Success", 201)
+
+
