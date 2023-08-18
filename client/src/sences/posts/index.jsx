@@ -1,4 +1,4 @@
-import { Container, useTheme, MobileStepper, Divider } from '@mui/material';
+import { Container, useTheme, MobileStepper, Divider, Tooltip } from '@mui/material';
 import { tokens } from '../../theme';
 import { useState, useEffect } from 'react';
 import Post from './components/post';
@@ -11,6 +11,7 @@ import NoPost from './components/NoPost';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateBar from '../global/NavigateBar';
 import Topbar from '../global/TopBar';
+import axios from 'axios';
 
 
 
@@ -22,8 +23,16 @@ const PostsPage = ({ topicInfor }) => {
 
    const [topicName, setTopicName] = useState("Null");
    const [activeStep, setActiveStep] = useState(0);
-   const [posts_data, setPostData] = useState([]);
+   const [allPostData, setAllPostData] = useState([]);
    const [maxSteps, setMaxSteps] = useState(0);
+
+   const [openHistory, setOpenHistory] = useState(false);
+   const user = JSON.parse(sessionStorage.getItem('user'));
+   const [postData, setPostData] = useState({
+      "history": [],
+      "questions": [],
+      "status": false
+   });
 
    const handleNext = () => {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -35,18 +44,35 @@ const PostsPage = ({ topicInfor }) => {
 
    useEffect(
       () => {
-         fetch(`/topics/${topicId}/posts`)
-            .then(res => res.json())
-            .then(data => {
-               setMaxSteps(data['posts'].length);
-               setPostData(data['posts']);
-               setTopicName(data['topic_name']);
-            })
-            .catch(err => console.log(err))
+         getAllPostData().then((data) => {
+            setAllPostData(data['posts']);
+            setMaxSteps(data['posts'].length);
+            setTopicName(data['topic_name']);
+            if (data['posts'].length) {
+               getPostData(data['posts'][activeStep]['_id']).then((data) => setPostData(data));
+            }
+         });
       }, []
    );
+   useEffect(
+      () => {
+         if (allPostData.length) {
+            getPostData(allPostData[activeStep]['_id']).then((data) => setPostData(data));
+         }
 
+      }, [activeStep, openHistory]
+   );
 
+   const getAllPostData = async () => {
+      return axios
+         .get(`/topics/${topicId}/posts`)
+         .then((res) => res.data)
+   };
+   const getPostData = async (postId) => {
+      return axios
+         .get(`/posts/${user.uid}/${postId}/status`)
+         .then((res) => res.data);
+   };
    return (
       <>
          <Topbar />
@@ -55,9 +81,9 @@ const PostsPage = ({ topicInfor }) => {
             {/* Navigate bar */}
             <NavigateBar pathInfor={[['Home', '/'], [topicName, '/'], ['Posts', '']]} />
             {
-               (posts_data.length != 0) ?
+               (allPostData.length != 0) ?
                   <>
-                     <Post postInfor={posts_data[activeStep]} />
+                     <Post postInfor={allPostData[activeStep]} postData={postData} setPostData={setPostData} openHistory={openHistory} setOpenHistory={setOpenHistory} />
                      <MobileStepper
                         variant="text"
                         steps={maxSteps}
@@ -69,14 +95,18 @@ const PostsPage = ({ topicInfor }) => {
                            borderRadius: 2
                         }}
                         nextButton={
-                           <Button
-                              onClick={handleNext}
-                              color="secondary"
-                              disabled={activeStep === maxSteps - 1}
-                           >
-                              Next
-                              <KeyboardArrowRight />
-                           </Button>
+                           <Tooltip title={!postData['status'] ? "You must passed the test to go to the next posts!" : ""}>
+                              <span>
+                                 <Button
+                                    onClick={handleNext}
+                                    color="secondary"
+                                    disabled={activeStep === maxSteps - 1 || !postData['status']}
+                                 >
+                                    Next
+                                    <KeyboardArrowRight />
+                                 </Button>
+                              </span>
+                           </Tooltip>
                         }
                         backButton={
                            <Button color="secondary" onClick={handleBack} disabled={activeStep === 0}>

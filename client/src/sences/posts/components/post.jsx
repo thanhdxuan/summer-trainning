@@ -1,10 +1,51 @@
-import { useTheme, Box, Typography, Paper, Stack, Chip, Avatar, Divider, Button } from '@mui/material';
+import { useTheme, Box, Typography, Stack, Chip, Avatar, Divider, Button, Collapse } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { useState, useEffect } from 'react';
 import { tokens } from '../../../theme';
 import ListQuestions from './Questions';
-
-const Post = ({ postInfor }) => {
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+const Post = ({ postInfor, postData, setPostData, openHistory, setOpenHistory }) => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
+
+   const HistoryTable = ({ rows }) => {
+      return (
+         <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+               <TableHead>
+                  <TableRow>
+                     <TableCell>Time</TableCell>
+                     <TableCell align="right">Score</TableCell>
+                     <TableCell align="right">Duration</TableCell>
+                     <TableCell align="right">View</TableCell>
+                  </TableRow>
+               </TableHead>
+               <TableBody>
+                  {rows.map((row, index) => (
+                     <TableRow
+                        key={row['_id']}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                     >
+                        <TableCell component="th" scope="row">
+                           {index}
+                        </TableCell>
+                        <TableCell align="right">{row['score']}</TableCell>
+                        <TableCell align="right">{row['duration']}</TableCell>
+                        <TableCell align="right">{null}</TableCell>
+                     </TableRow>
+                  ))}
+               </TableBody>
+            </Table>
+         </TableContainer>
+      );
+   };
 
    return (
       <Box width="100%" sx={{ px: 2, py: 2, bgcolor: colors.grayAccent[100], boxShadow: 2, borderRadius: 2 }}>
@@ -50,7 +91,7 @@ const Post = ({ postInfor }) => {
                >
                   <Box sx={{ pl: 2 }}>
                      <Avatar
-                        src='logo192.png'
+                        src='/images/logo/logo-removebg.png'
                         sx={{
                            border: 1,
                            borderColor: colors.whiteAccent[600]
@@ -62,14 +103,14 @@ const Post = ({ postInfor }) => {
                         {postInfor['author']}
                      </Box>
                      <Box display="flex" gap={1} alignItems="center">
-                        <Box> {postInfor['created_time']} </Box>
+                        <Box> {postInfor['created_date']} </Box>
                         <Divider orientation='vertical' flexItem />
                         <Box> {postInfor['estimate_time'] + ' read'} </Box>
                         <Divider orientation='vertical' flexItem />
-                        <Box> {postInfor['questions_numbers'] + ' questions'} </Box>
+                        <Box> {postData['questions'].length + ' questions'} </Box>
                         <Chip
-                           label={postInfor['status'] == 0 ? 'Not Completed' : 'Completed'}
-                           color={postInfor['status'] == 0 ? 'warning' : 'success'}
+                           label={postData['status'] === false ? 'Not Completed' : 'Completed'}
+                           color={postData['status'] === false ? 'warning' : 'success'}
                            size="small"
                         />
                      </Box>
@@ -83,9 +124,26 @@ const Post = ({ postInfor }) => {
             <Typography variant='h4'>
                {postInfor['content']}
             </Typography>
-            <Box sx={{ my: 2 }}>
-               <ListQuestions />
+            <Box display="flex" gap={1} sx={{ my: 2 }}>
+               <Box>
+                  <Button
+                     size="large"
+                     variant='outlined'
+                     color='secondary'
+                     onClick={() => { openHistory ? setOpenHistory(false) : setOpenHistory(true) }}
+                  >
+                     View History
+                     {!openHistory && <KeyboardArrowRight />}
+                     {openHistory && <KeyboardArrowDownIcon />}
+                  </Button>
+               </Box>
+               <Box>
+                  <ListQuestions questions={postData['questions']} postId={postInfor['_id']} setPostData={setPostData} postData={postData} />
+               </Box>
             </Box>
+            <Collapse in={openHistory}>
+               <HistoryTable rows={postData['history']} />
+            </Collapse>
          </Box>
       </Box>
    );
