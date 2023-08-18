@@ -1,15 +1,15 @@
-import { Box, useTheme, Paper, Grid, Button, Link } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { tokens } from '../theme';
 import { Chip } from '@mui/material';
 import LinearProgressWithLabel from '../sences/posts/components/LinearProgressWithLabel';
 import { useNavigate } from 'react-router-dom';
 
-const SubjectCard = ({ cardInfo }) => {
+const SubjectCard = ({ cardInfo, userData }) => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
    const navigate = useNavigate();
-
+   const cardValue = (userData === undefined) ? 0 : (userData['passed_count'] * 100 / cardInfo['num_posts'])
    const label = [
       'Easy',
       'Medium',
@@ -38,9 +38,10 @@ const SubjectCard = ({ cardInfo }) => {
          <Box sx={{ mx: 2, my: 2 }}>
             <img
                src={cardInfo['thumbnail']}
+               alt="thumbnail" //TODO - Add an alternative image for
                style={{
                   borderRadius: 15,
-                  width: '100%',
+                  width: 200,
                   height: 200
                }}
                loading="lazy"
@@ -73,12 +74,12 @@ const SubjectCard = ({ cardInfo }) => {
                <Box>
                   <Box fontSize={{ xs: 8, md: 10 }}>
                      Completed
-                     <LinearProgressWithLabel value={39} />
+                     <LinearProgressWithLabel value={cardValue} color={cardValue === 100 ? "success" : (cardValue === 0 ? "error" : "warning")} />
                   </Box >
-                  <Box fontSize={{ xs: 8, md: 10 }}>
+                  {/* <Box fontSize={{ xs: 8, md: 10 }}>
                      Correct Ratio
                      <LinearProgressWithLabel value={80} />
-                  </Box>
+                  </Box> */}
                </Box>
                <Box display="flex" sx={{ mt: 1 }} gap={1}>
                   <Chip label={label[cardInfo['level'] - 1]} size='small' color={label_color[cardInfo['level'] - 1]} />
