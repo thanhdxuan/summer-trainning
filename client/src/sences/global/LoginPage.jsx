@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -36,7 +36,7 @@ const LoginPage = ({ setLoggedIn }) => {
 
    const handleChange = (event) => {
       event.preventDefault();
-      if (event.target.id == 'email') {
+      if (event.target.id === 'email') {
          setEmail(event.target.value);
       }
       else {
@@ -57,7 +57,8 @@ const LoginPage = ({ setLoggedIn }) => {
                email: res.data.email,
                is_admin: res.data.is_admin,
                is_active: res.data.is_active,
-               token: res.data.token
+               token: res.data.token,
+               uid: res.data.uid
             };
             sessionStorage.setItem('user', JSON.stringify(dataResponse));
          })
@@ -113,6 +114,7 @@ const LoginPage = ({ setLoggedIn }) => {
                   </Grid>
                   <Grid item>
                      <img
+                        alt='thumbnail' //TODO - Add an alternative img
                         src='/images/logo/light-removebg.png'
                         style={{
                            height: 50
