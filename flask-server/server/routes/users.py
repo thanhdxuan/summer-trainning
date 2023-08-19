@@ -3,6 +3,7 @@ from .auth import token_required
 from flask import make_response, jsonify, request
 from server.models import Users, Tests, Posts, engine, db, Topics
 from sqlalchemy import text
+from datetime import datetime
 
 @app.route('/users/<public_uid>/status', methods=['GET'])
 # @token_required
@@ -58,6 +59,24 @@ def submit_test():
 
    return make_response("Success!", 201)
 
+@app.route('/users/all', methods=['GET'])
+def get_all_user():
+   users = Users.query.order_by(Users._id).all()
+   users = [{'_id': user.public_id, 'email': user.email, 
+            'is_active': user.is_active, 'username': user.username,
+            'is_admin': user.is_admin,
+            'created_date': user.created_date.strftime('%B %d, %Y')
+            } for user in users ]
+   return jsonify(users)
+
+# @app.route('/users/activate', methods=['POST'])
+# def activate_user():
+#    data = request.form
+   
+#    public_id = data.get('_id')
+
+#    Users.activate(public_id)
+#    return make_response("Activate success", 201)
 """
    test_id uid p_id        pid_
    Select *

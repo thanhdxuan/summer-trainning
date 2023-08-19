@@ -106,8 +106,16 @@ def sign_up():
 def activate_user():
     data = request.form
 
-    public_id = data.get('public_id')
-    Users.activate(public_id=public_id)
+    username = data.get('username')
+    Users.activate(username=username)
+    return make_response("Success", 201)
+
+@app.route("/users/deactivate", methods=['POST'])
+def deactivate_user():
+    data = request.form
+
+    username = data.get('username')
+    Users.deactivate(username=username)
     return make_response("Success", 201)
 
 

@@ -2,7 +2,19 @@ from flask import jsonify, send_file, request, make_response
 from server import app
 from server.models import Topics, Posts, Question, Tests, Users
 from .auth import token_required
+import os
+from hashlib import sha512
+import base64
 
+def generate_hashed_filename(file, max_length=50):
+    file_hash = sha512(str(file.filename).encode('utf-8')).hexdigest()
+
+    _, file_extension = os.path.splitext(file.filename)
+
+
+    hashed_filename = file_hash[max_length:] + file_extension
+
+    return hashed_filename
 
 @app.route("/topics", methods=['GET'])
 @token_required
@@ -80,11 +92,11 @@ def get_image(typ, filename):
     image_path = f'public/images/{typ}/{filename}'
 
     if typ in ['topics']:
-        res = send_file(image_path, mimetype='image/svg+xml')
-    elif typ in ['logo', 'general']:
-        res = send_file(image_path, mimetype='image/png')
-    elif typ in ['posts']:
         res = send_file(image_path, mimetype='image/jpg')
+    elif typ in ['logo', 'general']:
+        res = send_file(image_path, mimetype='image/*')
+    elif typ in ['posts']:
+        res = send_file(image_path, mimetype='image/*')
     return res
     
 
@@ -98,10 +110,16 @@ def get_image_for_posts(topicId, filename):
 def add_new_topic():
     data = request.form
 
+    file = request.files['file']
+    if file:
+        hashed_filename = generate_hashed_filename(file)
+        upload_path = os.path.join(app.config['UPLOADS_PATH'], 'images/topics/', hashed_filename)
+        file.save(upload_path)
+
     new_topic = Topics(
         name = data.get('name'),
         level = data.get('level'),
-        thumbnail = data.get('thumbnail'),
+        thumbnail = f"/images/topics/{hashed_filename}",
         description = data.get('description')
     )
     try:
@@ -109,6 +127,15 @@ def add_new_topic():
         return make_response("Add topic successfully!", 201)
     except:
         return make_response("Failed", 401)
+
+@app.route('/topics/delete', methods=['POST'])
+def delete_post():
+    data = request.form
+
+    _id = data.get('id')
+
+    Topics.remove_topic(topic_id=_id)
+    return make_response("Success", 201)
 
 @app.route('/posts/add', methods=['POST'])
 def add_new_post():
@@ -127,6 +154,7 @@ def add_new_post():
         return make_response("Add new posts successfully", 201)
     except:
         return make_response("Failed", 401)
+
 
 @app.route('/questions/add', methods=['POST'])
 def add_new_question():

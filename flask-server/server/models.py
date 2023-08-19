@@ -29,6 +29,10 @@ class Topics(db.Model):
     def add_new_topic(new_topic):
         db.session.add(new_topic)
         db.session.commit()
+    def remove_topic(topic_id: int):
+        topic = Topics.query.filter_by(_id=topic_id).first()
+        db.session.delete(topic)
+        db.session.commit()
 
 @dataclass
 class Posts(db.Model):
@@ -105,10 +109,15 @@ class Users(db.Model):
     def get_real_id(public_id: int):
         user = Users.query.filter_by(public_id=public_id).first()
         return user._id
-    def activate(public_id: str):
+    def activate(username: str):
         db.session.query(Users).\
-            filter(Users.public_id == public_id).\
+            filter(Users.username == username).\
             update({'is_active': True})
+        db.session.commit()
+    def deactivate(username: str):
+        db.session.query(Users).\
+            filter(Users.username == username).\
+            update({'is_active': False})
         db.session.commit()
 
 @dataclass
