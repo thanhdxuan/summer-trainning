@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { tokens } from '../../theme';
-import { useTheme } from '@mui/material';
+import { useTheme, FormHelperText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -33,6 +33,7 @@ const LoginPage = ({ setLoggedIn }) => {
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
    const navigate = useNavigate();
+   const [helperText, setHelperText] = useState("");
 
    const handleChange = (event) => {
       event.preventDefault();
@@ -46,29 +47,42 @@ const LoginPage = ({ setLoggedIn }) => {
    const handleSubmit = (event) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      axios({
-         method: 'post',
-         url: 'http://localhost:5000/users/login',
-         data: data
-      })
-         .then((res) => {
-            const dataResponse = {
-               username: res.data.username,
-               email: res.data.email,
-               is_admin: res.data.is_admin,
-               is_active: res.data.is_active,
-               token: res.data.token,
-               uid: res.data.uid
-            };
-            sessionStorage.setItem('user', JSON.stringify(dataResponse));
+      try {
+         axios({
+            method: 'post',
+            url: 'http://localhost:5000/users/login',
+            data: data
          })
-         .then(() => {
-            setLoggedIn(true);
-            navigate('/');
-         })
-         .catch((res) => {
-            console.log(res);
-         });
+            .then((res) => {
+               const dataResponse = {
+                  username: res.data.username,
+                  email: res.data.email,
+                  is_admin: res.data.is_admin,
+                  is_active: res.data.is_active,
+                  token: res.data.token,
+                  uid: res.data.uid
+               };
+               return dataResponse;
+            })
+            .then((dataRes) => {
+               if (dataRes.is_active) {
+                  sessionStorage.setItem('user', JSON.stringify(dataRes));
+                  setLoggedIn(true);
+                  navigate('/');
+               }
+               else {
+                  setHelperText("Your account is not activated. Please contact your moderator.")
+               }
+            })
+            .catch((err) => {
+               const mute = err;
+               if (err.response.status === 403) {
+                  setHelperText("Email or Password is incorrect!");
+               }
+            });
+      } catch (error) {
+
+      };
    };
 
    return (
@@ -147,6 +161,7 @@ const LoginPage = ({ setLoggedIn }) => {
                      color='secondary'
                      onChange={handleChange}
                   />
+                  <FormHelperText error>{helperText}</FormHelperText>
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                      <Box>
                         <FormControlLabel
