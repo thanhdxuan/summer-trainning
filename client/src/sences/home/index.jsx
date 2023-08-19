@@ -10,6 +10,7 @@ import './styles.css'
 import SearchBar from './components/SearchBar';
 import Topbar from '../global/TopBar';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
    const theme = useTheme();
@@ -17,6 +18,7 @@ const Home = () => {
    const [topics, setTopics] = useState([]);
    const [userData, setUserData] = useState([]);
    const user = JSON.parse(sessionStorage.getItem("user"));
+   const navigate = useNavigate();
    const header = {
       'headers': {
          "x-access-token": user.token
@@ -25,7 +27,12 @@ const Home = () => {
    const getTopicData = async () => {
       return axios
          .get(`/topics`, header)
-         .then((res) => res.data);
+         .then((res) => res.data)
+         .catch((err) => {
+            if (err.response.status === 401) {
+               navigate('/signin');
+            }
+         });
    };
    const getUserData = async () => {
       return axios
