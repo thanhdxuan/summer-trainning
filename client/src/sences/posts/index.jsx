@@ -100,7 +100,7 @@ const PostsPage = ({ topicInfor }) => {
                                  <Button
                                     onClick={handleNext}
                                     color="secondary"
-                                    disabled={activeStep === maxSteps - 1 || !postData['status']}
+                                    disabled={(!postData['status'] && !user.is_admin) || activeStep === maxSteps - 1}
                                  >
                                     Next
                                     <KeyboardArrowRight />

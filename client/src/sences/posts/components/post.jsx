@@ -11,6 +11,8 @@ import { tokens } from '../../../theme';
 import ListQuestions from './Questions';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import parse from "html-react-parser";
+
 const Post = ({ postInfor, postData, setPostData, openHistory, setOpenHistory }) => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
@@ -100,12 +102,12 @@ const Post = ({ postInfor, postData, setPostData, openHistory, setOpenHistory })
                   </Box>
                   <Box sx={{ pl: 2 }}>
                      <Box fontWeight="bold">
-                        {postInfor['author']}
+                        { postInfor['author']}
                      </Box>
                      <Box display="flex" gap={1} alignItems="center">
                         <Box> {postInfor['created_date']} </Box>
                         <Divider orientation='vertical' flexItem />
-                        <Box> {postInfor['estimate_time'] + ' read'} </Box>
+                        <Box> {postInfor['read_time'] + ' mins read'} </Box>
                         <Divider orientation='vertical' flexItem />
                         <Box> {postData['questions'].length + ' questions'} </Box>
                         <Chip
@@ -122,7 +124,7 @@ const Post = ({ postInfor, postData, setPostData, openHistory, setOpenHistory })
          {/* Contents */}
          <Box sx={{ mt: 2 }}>
             <Typography variant='h4'>
-               {postInfor['content']}
+               {parse(postInfor['content'])}
             </Typography>
             <Box display="flex" gap={1} sx={{ my: 2 }}>
                <Box>

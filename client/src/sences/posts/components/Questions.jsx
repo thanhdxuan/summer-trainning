@@ -158,10 +158,7 @@ export default function ListQuestions({ questions, postId, setPostData, postData
       setResult(`${correct}/${questions.length}`)
       if (postData['status'] === false && passed) {
          setPostData({...postData, 'status': passed});
-      } else {
-         let prevHistory = postData['history'];
-         setPostData({...postData, 'status': passed});
-      }
+      } 
    };
 
 
