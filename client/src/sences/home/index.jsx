@@ -48,7 +48,7 @@ const Home = () => {
       }, []
    );
 
-   const handleSearch = (searchTerm) => {
+   const handleSearch = async (searchTerm) => {
       fetch(`/search/topics?name=${searchTerm}`)
          .then(res => res.json())
          .then(data => {
@@ -81,28 +81,28 @@ const Home = () => {
                         color={colors.blackAccent[800]}
                         fontWeight='bold'
                      >
-                        Find textbook solutions you can trust
+                        Right now, your competition is training.
                      </Typography>
                      <Typography
                         variant="h4"
                         color={colors.blackAccent[800]}
                         fontWeight='bold'
                      >
-                        Step-by-step explanations
+                        Be stronger thanh your excusé
                      </Typography>
                      <Typography
                         variant="h4"
                         color={colors.blackAccent[800]}
                         fontWeight='bold'
                      >
-                        Expert-written and verified answers
+                        Don't settle for average
                      </Typography>
                      <Typography
                         variant="h4"
                         color={colors.blackAccent[800]}
                         fontWeight='bold'
                      >
-                        Millions of solutions for popular textbooks
+                        Don't bunt.
                      </Typography>
                      {/* Search bar */}
                   </Box>
