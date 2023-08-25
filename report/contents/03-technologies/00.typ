@@ -31,7 +31,7 @@ Một số ưu điểm của Material-UI bao gồm:
 - *Hỗ trợ tương thích đa trình duyệt*: Material-UI được thiết kế để tương thích với nhiều trình duyệt khác nhau, bao gồm cả trình duyệt di động. Điều này giúp đảm bảo rằng ứng dụng của chúng ta sẽ hoạt động một cách nhất quán trên các nền tảng khác nhau mà không cần quá nhiều công việc tùy chỉnh.
 - *Hệ sinh thái mạnh mẽ*: Material-UI có một hệ sinh thái đa dạng và phong phú, bao gồm nhiều thành phần, mẫu thiết kế, tiện ích và các công cụ hỗ trợ. Chúng ta có thể tìm thấy sẵn một loạt các thành phần và giải pháp để giúp chúng ta xây dựng giao diện người dùng chất lượng cao một cách nhanh chóng và dễ dàng.
 == Phía server (Back - end)
-*PostgreSQL*
+*PostgreSQL* @web-psql
 
 PostgreSQL là một hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở và mạnh mẽ. Nó được phát triển với sự chú trọng vào tính đồng nhất, bảo mật và khả năng mở rộng. PostgreSQL hỗ trợ các tính năng SQL tiên tiến, cung cấp một môi trường đáng tin cậy để lưu trữ và quản lý dữ liệu.
 #figure(
@@ -52,7 +52,7 @@ Một số ưu điểm của PostgreSQL bao gồm:
 
 PostgreSQL là một hệ quản trị cơ sở dữ liệu ổn định, mạnh mẽ và linh hoạt. Với tính tin cậy cao, tính mở rộng, và nhiều tính năng tiên tiến, PostgreSQL là một lựa chọn phổ biến cho việc lưu trữ và quản lý dữ liệu trong các ứng dụng phức tạp. Vì vậy, ở sinh viên sử dụng PostgreSQL để lưu trữ và quản lý cơ sở dữ liệu của trang web này.
 
-*Flask*
+*Flask* @web-flask
 
 Ở trong dự án này, chúng ta sử dụng Flask để xử lý logic ở phía server.
 

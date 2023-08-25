@@ -1,4 +1,5 @@
 = Hiện thực
+Toàn bộ thông tin về mã nguồn của hệ thống được lưu trữ tại link Github: #link("https://github.com/thanhdxuan/summer-trainning")[https://github.com/thanhdxuan/summer-trainning]
 == Tổng quan kiến trúc hệ thống
 Ở đây, sinh viên sử dụng kiến trúc MVC (Model - View - Controller) để thiết kế ứng dụng.
 - *Model*: Các model để lưu trữ dữ liệu của hệ thống như *Topics*, *Users*, ...
