@@ -43,6 +43,7 @@ class Posts(db.Model):
     description: str
     content: str
     banner: str
+    read_time: int
 
     _id = db.Column("post_id", db.Integer(), primary_key=True)
     topic_id = db.Column("topic_id", db.Integer(), db.ForeignKey(Topics._id), primary_key=True)
@@ -51,9 +52,20 @@ class Posts(db.Model):
     description = db.Column("p_description", db.String())
     content = db.Column("p_text", db.String(), nullable=False)
     banner = db.Column(db.String())
+    read_time = db.Column(db.Integer())
 
     def add_new_post(new_post):
         db.session.add(new_post)
+        db.session.commit()
+    def update_post(id: int, update):
+        db.session.query(Posts).\
+            filter(Posts._id == id).\
+            update({
+                'title': update['title'],
+                'description': update['description'],
+                'content': update['content'],
+                'read_time': update['read_time']
+            })
         db.session.commit()
 
 @dataclass
@@ -67,7 +79,7 @@ class Question(db.Model):
     op_d: str
     answer: int
 
-    _id = db.Column("q_id", db.Integer(), primary_key=True)
+    _id = db.Column("q_id", db.Integer(), primary_key=True, autoincrement=True)
     post_id = db.Column(db.Integer(), db.ForeignKey(Posts._id), primary_key=True)
     content = db.Column("q_text", db.String(), nullable=False)
     op_a = db.Column(db.String(), nullable=False)
@@ -78,6 +90,10 @@ class Question(db.Model):
 
     def add_new_question(new_question):
         db.session.add(new_question)
+        db.session.commit()
+    def remove_question(id: int):
+        question = Question.query.filter_by(_id=id).first()
+        db.session.delete(question)
         db.session.commit()
 
 @dataclass

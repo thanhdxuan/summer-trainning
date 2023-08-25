@@ -5,6 +5,7 @@ from .auth import token_required
 import os
 from hashlib import sha512
 import base64
+from datetime import datetime
 
 def generate_hashed_filename(file, max_length=50):
     file_hash = sha512(str(file.filename).encode('utf-8')).hexdigest()
@@ -61,14 +62,33 @@ def get_all_posts_from_topic_id(topic_id):
     posts = Posts.query.filter_by(topic_id=topic_id).all()
     topic = Topics.query.filter_by(_id=topic_id).all()
 
+    
+    def get_num_of_question(postId):
+        return len(Question.query.filter_by(post_id=postId).all())
     infor = {
         "topic_name": topic[0].name,
-        "posts": posts
+        "posts": [{
+            '_id': post._id,
+            'title': post.title,
+            'number_of_questions': get_num_of_question(postId=post._id),
+            'created_date': post.created_date.strftime('%B %d, %Y'),
+            'banner': post.banner,
+            'read_time': post.read_time,
+            'content': post.content,
+            'description': post.description
+        } for post in posts]
     }
-
     return jsonify(infor)
+
+@app.route('/posts/<post_id>/questions')
+def get_all_question_of_posts(post_id):
+    questions = Question.query.filter_by(post_id=post_id).order_by(Question._id).all()
+    
+    return jsonify(questions)
+
+
 @app.route('/posts/<public_id>/<post_id>/status')
-def get_all_question_of_posts(post_id, public_id):
+def user_get_all_question_of_posts(post_id, public_id):
     uid = Users.get_real_id(public_id=public_id)
 
     questions = Question.query.filter_by(post_id=post_id).order_by(Question._id).all()
@@ -92,7 +112,7 @@ def get_image(typ, filename):
     image_path = f'public/images/{typ}/{filename}'
 
     if typ in ['topics']:
-        res = send_file(image_path, mimetype='image/jpg')
+        res = send_file(image_path, mimetype='image/*')
     elif typ in ['logo', 'general']:
         res = send_file(image_path, mimetype='image/*')
     elif typ in ['posts']:
@@ -129,7 +149,7 @@ def add_new_topic():
         return make_response("Failed", 401)
 
 @app.route('/topics/delete', methods=['POST'])
-def delete_post():
+def delete_topic():
     data = request.form
 
     _id = data.get('id')
@@ -141,12 +161,20 @@ def delete_post():
 def add_new_post():
     data = request.form
 
+    file = request.files['file']
+    if file:
+        hashed_filename = generate_hashed_filename(file)
+        upload_path = os.path.join(app.config['UPLOADS_PATH'], 'images/posts/', hashed_filename)
+        file.save(upload_path)
+    
     new_post = Posts(
         topic_id = data.get('topic_id'),
         title = data.get('title'),
-        created_date = data.get('created_date'),
+        created_date = datetime.now(),
         description = data.get('description'),
-        banner = data.get('banner')
+        content = data.get('content'),
+        read_time = data.get('read_time'),
+        banner = f"/images/posts/{hashed_filename}"
     )
 
     try:
@@ -166,9 +194,35 @@ def add_new_question():
         op_a = data.get('op_a'),
         op_b = data.get('op_b'),
         op_c = data.get('op_c'),
-        op_d = data.get('op_d')
+        op_d = data.get('op_d'),
+        answer = data.get('answer')
     )
     Question.add_new_question(new_question)
+
+    return make_response("Success", 201)
+
+@app.route('/questions/delete', methods=['POST'])
+def delete_post():
+    data = request.form
+    _id = data.get('id')
+
+    Question.remove_question(id=_id)
+    return make_response("Success", 201)
+
+
+@app.route('/posts/update', methods=['POST'])
+def update_post():
+    data = request.form
+    _id = data.get('id')
+
+    updated = {
+        'title': data.get('title'),
+        'description': data.get('description'),
+        'content': data.get('content'),
+        'read_time': data.get('read_time'),
+    }
+    Posts.update_post(_id, update=updated)    
+    return make_response("Success", 201)
     
 
 

@@ -6,7 +6,11 @@ import datetime
 from datetime import datetime, timedelta, timezone
 import jwt
 import uuid
+import random
 from functools import wraps
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 def token_required(f):
     @wraps(f)
@@ -33,6 +37,36 @@ def token_required(f):
         return  f(current_user, *args, **kwargs)
   
     return decorated
+
+
+def send_password_reset_email(email, reset_link):
+    # Email configuration
+    smtp_server = 'your_smtp_server'
+    smtp_port = 587  # Update with the appropriate SMTP port
+    sender_email = 'your_sender_email'
+    sender_password = 'your_sender_password'
+    subject = 'Password Reset'
+
+    # Email content
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = email
+    message['Subject'] = subject
+
+    body = f"Hello,\n\nPlease click on the following link to reset your password: {reset_link}\n\nIf you did not request a password reset, please ignore this email.\n\nBest regards,\nYour Application Team"
+
+    message.attach(MIMEText(body, 'plain'))
+
+    # Connect to the SMTP server and send the email
+    try:
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, email, message.as_string())
+        print("Password reset email sent successfully!")
+    except Exception as e:
+        print("Error sending password reset email:", str(e))
+
 @app.route("/users/login", methods=['POST'])
 def login():
     auth = request.form
@@ -117,5 +151,19 @@ def deactivate_user():
     username = data.get('username')
     Users.deactivate(username=username)
     return make_response("Success", 201)
+
+passcode_storage = {}
+@app.route("/user/change-password", methods=['GET', 'POST'])
+def change_password():
+    if request.method == 'POST':
+        data = request.form
+        public_id = data.get('public_id')
+        email = data.get('email')
+        passcode = str(random.randint(100000, 999999))
+        passcode_storage[email] = passcode
+
+        #send email
+
+
 
 
