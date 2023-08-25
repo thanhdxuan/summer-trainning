@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 
 
-const VerifyDialog = ({typ, message, open, handleClose }) => {
+const VerifyDialog = ({ message, open, handleClose }) => {
    return (
       <Dialog
          open={open}

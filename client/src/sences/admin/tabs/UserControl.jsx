@@ -27,23 +27,11 @@ const UserControl = () => {
       description: ""
    });
 
-   const activeMessage = {
-      type: "active",
-      message: `Do you want to activate the user: ${userToActivate} ?`,
-      description: "This user can login to our website after activated."
-   };
-
-   const deactiveMessage = {
-      type: "deactive",
-      message: `Do you want to deactivate the user: ${userToActivate} ?`,
-      description: "This user can not login to our website after deactivated."
-   };
-
    const handleCloseDialog = (event) => {
       event.preventDefault()
 
       let dialogType = event.target.getAttribute("typ");
-      if (event.target.value !== undefined 
+      if (event.target.value !== undefined
          && event.target.value === 'true'
          && dialogType === 'active') {
          activateUser(userToActivate).then((data) => {
@@ -55,7 +43,7 @@ const UserControl = () => {
             }
          });
       }
-      else if (event.target.value !== undefined 
+      else if (event.target.value !== undefined
          && event.target.value === 'true'
          && dialogType === 'deactive') {
          deactivateUser(userToDeactivate).then((data) => {
@@ -116,7 +104,7 @@ const UserControl = () => {
    );
    return (
       <>
-         <TableContainer component={Paper}>
+         <TableContainer>
             <Table size="small">
                <TableHead>
                   <TableCell>ID</TableCell>
@@ -140,10 +128,14 @@ const UserControl = () => {
                            {!value.is_active && (
                               <TableCell>
                                  <IconButton onClick={(event) => {
-                                       setActivateDialog(true);
-                                       setUserToActivate(value.username)
-                                       setMessage(activeMessage);
-                                    }}>
+                                    setUserToActivate(value.username)
+                                    setMessage({
+                                       type: "active",
+                                       message: `Do you want to activate the user: ${value.username} ?`,
+                                       description: "This user can login to our website after activated."
+                                    });
+                                    setActivateDialog(true);
+                                 }}>
                                     <CheckIcon />
                                  </IconButton>
                               </TableCell>
@@ -151,10 +143,14 @@ const UserControl = () => {
                            {value.is_active && (
                               <TableCell>
                                  <IconButton onClick={(event) => {
-                                       setActivateDialog(true);
-                                       setUserToDeactivate(value.username);
-                                       setMessage(deactiveMessage);
-                                    }}>
+                                    setUserToDeactivate(value.username);
+                                    setMessage({
+                                       type: "deactive",
+                                       message: `Do you want to deactivate the user: ${value.username} ?`,
+                                       description: "This user can not login to our website after deactivated."
+                                    });
+                                    setActivateDialog(true);
+                                 }}>
                                     <CloseIcon />
                                  </IconButton>
                               </TableCell>
