@@ -10,6 +10,7 @@ import AdminPanel from './sences/admin/index.jsx';
 import LoginPage from './sences/global/LoginPage.jsx';
 import SignUpPage from './sences/global/SignUpPage.jsx';
 import ErrorPage from './sences/global/ErrorPage.jsx';
+import ResetPassword from './sences/reset_password/index.jsx';
 import { Navigate } from 'react-router-dom';
 
 const App = () => {
@@ -41,6 +42,7 @@ const App = () => {
               }
               <Route path="/signin" element={<LoginPage setLoggedIn={setLoggedIn} />} />
               <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/reset_password/:token" element={<ResetPassword />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </main>

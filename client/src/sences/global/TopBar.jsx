@@ -22,6 +22,7 @@ import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettin
 import { Link } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
+import ChangePasswordDialog from '../../components/ChangePasswordDialog';
 
 
 
@@ -30,6 +31,8 @@ const Topbar = () => {
    const colors = tokens(theme.palette.mode);
    const colorMode = useContext(ColorModeContext);
    const [open, setOpen] = useState(false);
+
+   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
    const [anchEl, setAnchorEl] = useState(null);
    const user = JSON.parse(sessionStorage.getItem("user"));
    const navigate = useNavigate();
@@ -47,18 +50,22 @@ const Topbar = () => {
       navigate("/signin");
    };
 
+   const handleChangePassword = () => {
+      setOpenPasswordDialog(true);
+   };
+
    return (
       <Container>
          <Box display="flex" justifyContent="space-between" py={2} alignItems="center">
             {/* ICONS */}
-            <Box 
+            <Box
                display="flex"
                sx={{
                   '&:hover': {
                      cursor: 'pointer'
                   }
                }}
-               onClick={() => {user ? navigate('/') : navigate('/signin')}}
+               onClick={() => { user ? navigate('/') : navigate('/signin') }}
             >
                <img
                   src='/images/logo/light-removebg.png'
@@ -107,7 +114,7 @@ const Topbar = () => {
                            </ListItem>
                            <Divider variant="middle" />
                            <ListItem>
-                              <Button color="info">
+                              <Button color="info" onClick={handleChangePassword}>
                                  Change password!
                               </Button>
                            </ListItem>
@@ -132,6 +139,7 @@ const Topbar = () => {
                </IconButton>
             </Box>
          </Box >
+         {openPasswordDialog && <ChangePasswordDialog open={openPasswordDialog} setOpen={setOpenPasswordDialog} />}
       </Container >
    );
 

@@ -30,8 +30,10 @@ const AdminPanel = () => {
    };
 
    const getTopicData = async () => {
+      const formData = new FormData();
+      formData.append('public_id', user.uid);
       return axios
-         .get('/topics', header)
+         .post('/topics', formData, header)
          .then((res) => res.data);
    };
 
