@@ -64,7 +64,7 @@ RETURNS TABLE (
 AS $$
 BEGIN
   RETURN QUERY
-  SELECT t.topic_id, t.topic_name, pt.uuid, COUNT(pt.post_id)::INT AS passed_post_count
+  SELECT t.topic_id, t.topic_name, pt.uuid, COUNT(DISTINCT pt.post_id)::INT AS passed_post_count
   FROM topics t
   JOIN posts p ON t.topic_id = p.topic_id
   JOIN tests pt ON p.post_id = pt.post_id

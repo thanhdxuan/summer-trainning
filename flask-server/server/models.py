@@ -2,7 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, update
 from dataclasses import dataclass
 from server import app
-import datetime
+from datetime import datetime, timedelta
+
+from authlib.jose import jwt
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://thanhdxn@127.0.0.1:5432/tranning-website'
 
@@ -135,27 +138,46 @@ class Users(db.Model):
             filter(Users.username == username).\
             update({'is_active': False})
         db.session.commit()
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+    def get_reset_token(self, expires_sec = 6000):
+        now = datetime.now()
+        payload = {
+            'uid': self._id,
+            'exp': now + timedelta(seconds=expires_sec)
+        }
+        token = jwt.encode(header={'alg': 'HS256'}, payload=payload, key=app.config['SECRET_KEY'])
+        return token
+    def verify_reset_token(token):
+        try:
+            _id = jwt.decode(token, key=app.config['SECRET_KEY'])['uid']
+        except:
+            return None
+        return Users.query.filter_by(_id=_id).first()
+
+
 
 @dataclass
 class Tests(db.Model):
     _id: int
     uuid: int
     post_id: int
-    duration: int
     num_of_question: int
     score: int
     passed: bool
     topic_id: int
+    taken_time: str
 
 
     _id = db.Column("test_id", db.Integer(), primary_key=True, autoincrement=True)
     uuid = db.Column(db.Integer(), db.ForeignKey(Users._id), primary_key=True)
     post_id = db.Column(db.Integer(), db.ForeignKey(Posts._id), primary_key=True)
-    duration = db.Column(db.Integer(), nullable=False)
     num_of_question = db.Column("num_question", db.Integer(), nullable=False)
     score = db.Column(db.Integer())
     passed = db.Column(db.Boolean(), nullable=False)
     topic_id = db.Column(db.Integer(), db.ForeignKey(Topics._id), nullable=False)
+    taken_time = db.Column(db.Date())
 
     def add_new_test(new_test):
         db.session.add(new_test)
