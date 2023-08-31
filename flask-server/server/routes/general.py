@@ -1,11 +1,13 @@
 from flask import jsonify, send_file, request, make_response
 from server import app
 from server.models import Topics, Posts, Question, Tests, Users
+from .users import get_passed_post_status
 from .auth import token_required
 import os
 from hashlib import sha512
 import base64
 from datetime import datetime
+import json
 
 def generate_hashed_filename(file, max_length=50):
     file_hash = sha512(str(file.filename).encode('utf-8')).hexdigest()
@@ -17,20 +19,26 @@ def generate_hashed_filename(file, max_length=50):
 
     return hashed_filename
 
-@app.route("/topics", methods=['GET'])
+@app.route("/topics", methods=['POST', 'GET'])
 @token_required
 def get_topic(token):
     topics = Topics.query.order_by(Topics._id).all()
     topic_list = []
 
+    uid = request.form.get('public_id')
+    status_data = json.loads(get_passed_post_status(uid).data)
     for topic in topics:
+        status = False
+        if str(topic._id) in status_data:
+            status = True
         topic_data = {
             'id': topic._id,
             'name': topic.name,
             'level': topic.level,
             'thumbnail': topic.thumbnail,
             'description': topic.description,
-            'num_posts': topic.get_number_of_posts()
+            'num_posts': topic.get_number_of_posts(),
+            'status': status
         }
         topic_list.append(topic_data)
     return jsonify(topic_list)
@@ -49,6 +57,7 @@ def get_topic_have_token():
                 'id': topic._id,
                 'name': topic.name,
                 'level': topic.level,
+                'description': topic.description,
                 'thumbnail': topic.thumbnail,
                 'num_posts': topic.get_number_of_posts()
             }
@@ -56,6 +65,33 @@ def get_topic_have_token():
 
     
     return jsonify(topic_list)
+@app.route('/filter/topics', methods=['POST'])
+@token_required
+def filter_topic(token):
+    level = int(request.form.get('level'))
+    status = int(request.form.get('status'))
+
+    topic_data = get_topic().json
+
+    fT = []
+    if level == -1 and status == -1:
+        for topic in topic_data:
+            fT.append(topic)
+        return jsonify(fT)
+    elif level == -1:
+        for topic in topic_data:
+            if topic['status'] == status:
+                fT.append(topic)
+    elif status == -1:
+        for topic in topic_data:
+            if topic['level'] - 1 == level:
+                fT.append(topic)
+    else:
+        for topic in topic_data:
+            if topic['status'] == status and topic['level'] - 1 == level:
+                fT.append(topic)
+    return jsonify(fT)
+
 
 @app.route("/topics/<topic_id>/posts")
 def get_all_posts_from_topic_id(topic_id):
@@ -100,9 +136,19 @@ def user_get_all_question_of_posts(post_id, public_id):
             passed_test = True
             break
 
+    reformat_test = [
+        {
+            "_id": test._id,
+            "passed": test.passed,
+            "post_id": test.post_id,
+            "score": test.score,
+            "taken_time": test.taken_time.strftime('%B %d, %Y'),
+            "topic_id": test.topic_id,
+        } for test in taken_test
+    ]
     status = {
         "questions": questions,
-        "history": taken_test,
+        "history": reformat_test,
         "status": passed_test
     }
     return jsonify(status)
@@ -112,7 +158,7 @@ def get_image(typ, filename):
     image_path = f'public/images/{typ}/{filename}'
 
     if typ in ['topics']:
-        res = send_file(image_path, mimetype='image/*')
+        res = send_file(image_path, mimetype='image/*+xml')
     elif typ in ['logo', 'general']:
         res = send_file(image_path, mimetype='image/*')
     elif typ in ['posts']:

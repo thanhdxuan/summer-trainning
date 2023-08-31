@@ -52,7 +52,8 @@ def submit_test():
       post_id = post_id,
       score = score,
       passed = passed == 'true',
-      topic_id = topic_id
+      topic_id = topic_id,
+      taken_time = datetime.now()
    )
 
    Tests.add_new_test(new_test=new_test)
@@ -68,18 +69,3 @@ def get_all_user():
             'created_date': user.created_date.strftime('%B %d, %Y')
             } for user in users ]
    return jsonify(users)
-
-# @app.route('/users/activate', methods=['POST'])
-# def activate_user():
-#    data = request.form
-   
-#    public_id = data.get('_id')
-
-#    Users.activate(public_id)
-#    return make_response("Activate success", 201)
-"""
-   test_id uid p_id        pid_
-   Select *
-   from test
-   where (post_id == post_id) and passed == passed
-"""
