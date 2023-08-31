@@ -23,10 +23,10 @@ const Post = ({ postInfor, postData, setPostData, openHistory, setOpenHistory })
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                <TableHead>
                   <TableRow>
-                     <TableCell>Time</TableCell>
-                     <TableCell align="right">Score</TableCell>
-                     <TableCell align="right">Duration</TableCell>
-                     <TableCell align="right">View</TableCell>
+                     <TableCell align='center'>No.</TableCell>
+                     <TableCell align="center">Score</TableCell>
+                     <TableCell align="center">Status</TableCell>
+                     <TableCell align="center">Taken At.</TableCell>
                   </TableRow>
                </TableHead>
                <TableBody>
@@ -35,12 +35,20 @@ const Post = ({ postInfor, postData, setPostData, openHistory, setOpenHistory })
                         key={row['_id']}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                      >
-                        <TableCell component="th" scope="row">
+                        <TableCell component="th" scope="row" align='center'>
                            {index}
                         </TableCell>
-                        <TableCell align="right">{row['score']}</TableCell>
-                        <TableCell align="right">{row['duration']}</TableCell>
-                        <TableCell align="right">{null}</TableCell>
+                        <TableCell align="center">{`${row['score']}/${postData['questions'].length}`}</TableCell>
+                        <TableCell align="center">
+                           {
+                              row['score'] === postData['questions'].length ? (
+                                 <Chip label='Passed' color='success' size='small'/>
+                              ) : (
+                                 <Chip label='Failed' color='error' size='small' />
+                              )
+                           }
+                        </TableCell>
+                        <TableCell align="center">{row['taken_time']}</TableCell>
                      </TableRow>
                   ))}
                </TableBody>
@@ -102,7 +110,7 @@ const Post = ({ postInfor, postData, setPostData, openHistory, setOpenHistory })
                   </Box>
                   <Box sx={{ pl: 2 }}>
                      <Box fontWeight="bold">
-                        { postInfor['author']}
+                        {postInfor['author']}
                      </Box>
                      <Box display="flex" gap={1} alignItems="center">
                         <Box> {postInfor['created_date']} </Box>
