@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Container, Grid } from "@mui/material";
-import { useTheme, Divider } from '@mui/material';
+import { Container, Chip, FormLabel, Grid, InputBase, InputLabel, MenuItem, Select } from "@mui/material";
+import { useTheme, Divider, FormControl } from '@mui/material';
 import { tokens } from '../../theme';
 import Header from '../../components/Header';
 import SubjectCard from '../../components/SubjectCard';
@@ -11,12 +11,15 @@ import SearchBar from './components/SearchBar';
 import Topbar from '../global/TopBar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ChangePasswordDialog from '../../components/ChangePasswordDialog';
 
 const Home = () => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
    const [topics, setTopics] = useState([]);
    const [userData, setUserData] = useState([]);
+   const [fStatusValue, setFStatusValue] = useState(-1);
+   const [fLevelValue, setFLevelValue] = useState(-1);
    const user = JSON.parse(sessionStorage.getItem("user"));
    const navigate = useNavigate();
    const header = {
@@ -24,9 +27,12 @@ const Home = () => {
          "x-access-token": user.token
       }
    }
+
    const getTopicData = async () => {
+      const formData = new FormData();
+      formData.append('public_id', user.uid);
       return axios
-         .get(`/topics`, header)
+         .post(`/topics`, formData, header)
          .then((res) => res.data)
          .catch((err) => {
             if (err.response.status === 401) {
@@ -43,11 +49,25 @@ const Home = () => {
    // eslint-disable-next-line
    useEffect(
       () => {
-         getTopicData().then((data) => setTopics(data));
-         getUserData().then((data) => setUserData(data));
+         getTopicData().then((data) => {
+            setTopics(data);
+         });
+         getUserData().then((data) => {
+            setUserData(data);
+         });
       }, []
    );
 
+   useEffect(
+      () => {
+         handleFilter(fStatusValue, fLevelValue)
+            .then((data) => {
+               setTopics(data);
+               console.log(data);
+            })
+            .catch(err => console.log(err));
+      }, [fLevelValue, fStatusValue]
+   )
    const handleSearch = async (searchTerm) => {
       fetch(`/search/topics?name=${searchTerm}`)
          .then(res => res.json())
@@ -55,6 +75,16 @@ const Home = () => {
             setTopics(data)
          })
          .catch(err => console.log(err))
+   };
+
+   const handleFilter = async (status, level) => {
+      const formData = new FormData();
+      formData.append('level', level);
+      formData.append('status', status);
+      formData.append('public_id', user.uid);
+      return axios
+         .post(`/filter/topics`, formData, header)
+         .then(res => res.data);
    };
 
    return (
@@ -107,6 +137,68 @@ const Home = () => {
                      {/* Search bar */}
                   </Box>
                   <SearchBar onSearch={handleSearch} />
+                  <Box display="flex" sx={{ mt: 2 }} gap={2}>
+                     <FormControl
+                        color='info'
+                        fullWidth
+                        size="small"
+                     >
+                        <InputLabel>Filter by status</InputLabel>
+                        <Select
+                           label="Filter by status"
+                           defaultValue={-1}
+                           renderValue={(selected) => {
+                              const value = ['Not Completed', 'Completed'];
+                              return (
+                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {
+                                       <Chip key={selected} label={selected === -1 ? 'All' : value[selected]} />
+                                    }
+                                 </Box>
+                              );
+                           }}
+                           onChange={(event) => {
+                              const value = event.target.value;
+                              setFStatusValue(value);
+                           }}
+                        >
+                           <MenuItem value={-1}>All</MenuItem>
+                           <MenuItem value={1}>Completed</MenuItem>
+                           <MenuItem value={0}>Not Completed</MenuItem>
+                        </Select>
+
+                     </FormControl>
+                     <FormControl
+                        color='info'
+                        fullWidth
+                        size="small"
+                     >
+                        <InputLabel>Filter by level</InputLabel>
+                        <Select
+                           label="Filter by level"
+                           defaultValue={-1}
+                           renderValue={(selected) => {
+                              const value = ['Easy', 'Medium', 'Hard'];
+                              return (
+                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {
+                                       <Chip key={selected} label={selected === -1 ? 'All' : value[selected]} />
+                                    }
+                                 </Box>
+                              );
+                           }}
+                           onChange={(event) => {
+                              const value = event.target.value;
+                              setFLevelValue(value);
+                           }}
+                        >
+                           <MenuItem value={-1}>All</MenuItem>
+                           <MenuItem value={0}>Easy</MenuItem>
+                           <MenuItem value={1}>Medium</MenuItem>
+                           <MenuItem value={2}>Hard</MenuItem>
+                        </Select>
+                     </FormControl>
+                  </Box>
                </Container>
             </Box>
             <Container maxWidth="lg">
