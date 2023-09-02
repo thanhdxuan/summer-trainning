@@ -1,5 +1,6 @@
 /flask-server/venv
 /flask-server/server/public/
+/flask-server/.env
 /front-end/node_modules
 
 # Ignore Python cache files
