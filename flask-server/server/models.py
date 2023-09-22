@@ -3,14 +3,11 @@ from sqlalchemy import create_engine, update
 from dataclasses import dataclass
 from server import app
 from datetime import datetime, timedelta
-
 from authlib.jose import jwt
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://thanhdxn@127.0.0.1:5432/tranning-website'
-
 db = SQLAlchemy(app)
-engine = create_engine('postgresql://thanhdxn@127.0.0.1:5432/tranning-website')
+engine = create_engine(app.config.get('SQLALCHEMY_DATABASE_URI'))
 
 @dataclass
 class Topics(db.Model):
@@ -155,8 +152,6 @@ class Users(db.Model):
         except:
             return None
         return Users.query.filter_by(_id=_id).first()
-
-
 
 @dataclass
 class Tests(db.Model):

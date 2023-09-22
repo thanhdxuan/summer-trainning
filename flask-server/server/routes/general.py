@@ -5,7 +5,6 @@ from .users import get_passed_post_status
 from .auth import token_required
 import os
 from hashlib import sha512
-import base64
 from datetime import datetime
 import json
 

@@ -1,7 +1,7 @@
 from server import app
 from .auth import token_required
 from flask import make_response, jsonify, request
-from server.models import Users, Tests, Posts, engine, db, Topics
+from server.models import Users, Tests, Posts, engine
 from sqlalchemy import text
 from datetime import datetime
 

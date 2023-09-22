@@ -1,5 +1,5 @@
 from server import app
-from flask import request, make_response, jsonify, redirect, url_for
+from flask import request, make_response, jsonify
 from  werkzeug.security import generate_password_hash, check_password_hash
 from server.models import Users
 import datetime

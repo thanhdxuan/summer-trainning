@@ -30,7 +30,7 @@ $$;
 
 -- # NOTE: Get random question from collection
 
-DROP FUNCTION GENERATE_TEST_FOR_POST;
+-- DROP FUNCTION GENERATE_TEST_FOR_POST;
 CREATE OR REPLACE FUNCTION GENERATE_TEST_FOR_POST (
    IN num_question INT,
    IN p_id INT
@@ -48,7 +48,7 @@ BEGIN
 END;
 $$;
 
-SELECT GENERATE_TEST_FOR_POST(5, 1);
+-- SELECT GENERATE_TEST_FOR_POST(5, 1);
 
 
 --- # NOTE: Function to make a test
@@ -73,5 +73,5 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP Function get_passed_post_count_by_user;
+-- DROP Function get_passed_post_count_by_user;
 
