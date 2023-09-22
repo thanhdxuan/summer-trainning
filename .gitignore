@@ -1,8 +1,6 @@
 /flask-server/venv
 /flask-server/server/public/
-/flask-server/.env
 /front-end/node_modules
-
 # Ignore Python cache files
 __pycache__/
 *.py[cod]
@@ -10,3 +8,4 @@ __pycache__/
 *.pyo
 *.pyd
 *.pyw
+flask-server/.env
