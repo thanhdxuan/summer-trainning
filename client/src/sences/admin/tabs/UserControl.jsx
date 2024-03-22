@@ -2,7 +2,6 @@ import {
    TableContainer,
    TableHead,
    TableCell,
-   Paper,
    Table,
    TableBody,
    TableRow,
@@ -17,7 +16,6 @@ import VerifyDialog from "../components/VerifyDialog";
 const UserControl = () => {
    const [userData, setUserData] = useState([]);
    const [activateDialog, setActivateDialog] = useState(false);
-   const [deactiveDialog, setDeactiveDialog] = useState(false);
    const [userToActivate, setUserToActivate] = useState("");
    const [userToDeactivate, setUserToDeactivate] = useState("");
 
@@ -35,7 +33,7 @@ const UserControl = () => {
          && event.target.value === 'true'
          && dialogType === 'active') {
          activateUser(userToActivate).then((data) => {
-            if (data.status == 201) {
+            if (data.status === 201) {
                console.log("Success");
             }
             else {
@@ -47,7 +45,7 @@ const UserControl = () => {
          && event.target.value === 'true'
          && dialogType === 'deactive') {
          deactivateUser(userToDeactivate).then((data) => {
-            if (data.status == 201) {
+            if (data.status === 201) {
                console.log("Success");
             }
             else {

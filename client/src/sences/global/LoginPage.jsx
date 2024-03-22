@@ -77,7 +77,6 @@ const LoginPage = ({ setLoggedIn }) => {
                }
             })
             .catch((err) => {
-               const mute = err;
                if (err.response.status === 403 || err.response.status === 401) {
                   setHelperText("Email or Password is incorrect!");
                }

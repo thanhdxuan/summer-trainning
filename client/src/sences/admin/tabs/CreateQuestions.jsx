@@ -16,9 +16,7 @@ import {
    IconButton,
    Collapse,
    TextField,
-   FormHelperText,
    Grid,
-   FormGroup,
    FormLabel,
    TablePagination
 } from "@mui/material";
@@ -193,7 +191,7 @@ const CreateQuestions = ({ getTopicData, getPostData, getQuestionData }) => {
    useEffect(
       () => {
          getTopicData().then((data) => setTopicData(data));
-      }, []
+      }, [getTopicData]
    );
 
    const handleChange = (event) => {

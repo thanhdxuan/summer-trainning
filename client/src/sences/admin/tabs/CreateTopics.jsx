@@ -4,15 +4,10 @@ import {
    TextField,
    MenuItem,
    Button,
-   LinearProgress,
    FormControl,
    InputLabel,
    Select,
    FormHelperText,
-   Alert,
-   Grow,
-   Typography,
-   Paper,
    Table,
    TableBody,
    TableRow,
@@ -25,8 +20,6 @@ import {
 } from "@mui/material";
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import TopicIcon from '@mui/icons-material/Topic';
-import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import VerifyDialog from "../components/VerifyDialog";
@@ -87,13 +80,13 @@ const CreateTopic = ({ getTopicData }) => {
    useEffect(
       () => {
          getTopicData().then((data) => setTopicData(data));
-      }, []
+      }, [getTopicData]
    );
 
    useEffect(
       () => {
          getTopicData().then((data) => setTopicData(data));
-      }, [openDelDialog]
+      }, [openDelDialog, getTopicData]
    );
 
    const [page, setPage] = useState(0);

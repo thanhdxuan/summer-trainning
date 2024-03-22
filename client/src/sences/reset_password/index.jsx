@@ -9,6 +9,7 @@ const ResetPassword = () => {
    const [newPass, setNewPass] = useState("");
    const [confirmPass, setConfirmPass] = useState("");
    const [isValid, setIsValid] = useState(false);
+   // eslint-disable-next-line
    const [errorText, setErrorText] = useState("");
    const [openAlert, setOpenAlert] = useState(false);
    const [success, setSuccess] = useState(false);

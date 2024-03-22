@@ -3,7 +3,6 @@ import {
    Box,
    Grid,
    Button,
-   Paper,
    DialogContent,
    DialogActions,
    DialogTitle,
@@ -11,7 +10,7 @@ import {
    FormControl,
    FormHelperText
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';

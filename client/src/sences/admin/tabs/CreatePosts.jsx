@@ -19,7 +19,6 @@ import {
    FormHelperText,
    Grid,
    FormLabel,
-   Dialog
 } from "@mui/material";
 
 import EditIcon from '@mui/icons-material/Edit';
@@ -187,7 +186,7 @@ const CreatePost = ({ getTopicData, getPostData }) => {
    useEffect(
       () => {
          getTopicData().then((data) => setTopicData(data));
-      }, []
+      }, [getTopicData]
    );
 
    // useEffect(

@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -39,10 +36,10 @@ const SignUpPage = () => {
 
    const handleChange = (event) => {
       event.preventDefault();
-      if (event.target.id == 'email') {
+      if (event.target.id === 'email') {
          setEmail(event.target.value);
       }
-      else if (event.target.id == 'password') {
+      else if (event.target.id === 'password') {
          setPassword(event.target.value);
       }
       else {
@@ -122,6 +119,7 @@ const SignUpPage = () => {
                         style={{
                            height: 50
                         }}
+                        alt='Light Logo'
                      />
                   </Grid>
                </Grid>
@@ -169,7 +167,7 @@ const SignUpPage = () => {
                      color='success'
                      size='large'
                      variant='contained'
-                     disabled={(username == '' || password == '' || email == '') ? true : false}
+                     disabled={(username === '' || password === '' || email === '') ? true : false}
                   >
                      Sign Up
                   </Button>

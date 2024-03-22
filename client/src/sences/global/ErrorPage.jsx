@@ -10,6 +10,7 @@ const ErrorPage = () => {
                   width: 200
                }}
                loading='lazy'
+               alt="Empty Page"
             />
          </Box>
          <Typography

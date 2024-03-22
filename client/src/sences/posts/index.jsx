@@ -1,14 +1,12 @@
 import { Container, useTheme, MobileStepper, Divider, Tooltip } from '@mui/material';
 import { tokens } from '../../theme';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Post from './components/post';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Button from '@mui/material/Button';
 import { useParams } from 'react-router-dom';
 import NoPost from './components/NoPost';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateBar from '../global/NavigateBar';
 import Topbar from '../global/TopBar';
 import axios from 'axios';
@@ -41,6 +39,16 @@ const PostsPage = ({ topicInfor }) => {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
    };
 
+   const getAllPostData = useCallback(async () => {
+      return axios
+         .get(`/topics/${topicId}/posts`)
+         .then((res) => res.data)
+   }, [topicId]);
+   const getPostData = useCallback(async (postId) => {
+      return axios
+         .get(`/posts/${user.uid}/${postId}/status`)
+         .then((res) => res.data);
+   }, [user.uid]);
 
    useEffect(
       () => {
@@ -52,7 +60,7 @@ const PostsPage = ({ topicInfor }) => {
                getPostData(data['posts'][activeStep]['_id']).then((data) => setPostData(data));
             }
          });
-      }, []
+      }, [getAllPostData, getPostData, activeStep]
    );
    useEffect(
       () => {
@@ -60,19 +68,9 @@ const PostsPage = ({ topicInfor }) => {
             getPostData(allPostData[activeStep]['_id']).then((data) => setPostData(data));
          }
 
-      }, [activeStep, openHistory]
+      }, [activeStep, openHistory, getPostData, allPostData]
    );
 
-   const getAllPostData = async () => {
-      return axios
-         .get(`/topics/${topicId}/posts`)
-         .then((res) => res.data)
-   };
-   const getPostData = async (postId) => {
-      return axios
-         .get(`/posts/${user.uid}/${postId}/status`)
-         .then((res) => res.data);
-   };
    return (
       <>
          <Topbar />
@@ -81,7 +79,7 @@ const PostsPage = ({ topicInfor }) => {
             {/* Navigate bar */}
             <NavigateBar pathInfor={[['Home', '/'], [topicName, '/'], ['Posts', '']]} />
             {
-               (allPostData.length != 0) ?
+               (allPostData.length !== 0) ?
                   <>
                      <Post postInfor={allPostData[activeStep]} postData={postData} setPostData={setPostData} openHistory={openHistory} setOpenHistory={setOpenHistory} />
                      <MobileStepper

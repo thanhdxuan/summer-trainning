@@ -72,6 +72,7 @@ const Topbar = () => {
                   style={{
                      height: 40
                   }}
+                  alt='Light Logo'
                />
             </Box>
             <Box display="flex" alignItems="center">

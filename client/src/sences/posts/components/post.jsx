@@ -6,7 +6,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useState, useEffect } from 'react';
 import { tokens } from '../../../theme';
 import ListQuestions from './Questions';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -69,6 +68,7 @@ const Post = ({ postInfor, postData, setPostData, openHistory, setOpenHistory })
                   height: 400,
                   borderRadius: 10
                }}
+               alt="Banner"
             />
             <Box display="flex" flexDirection="column" sx={{ mx: 2 }} justifyContent="space-between" >
                {/* Title */}

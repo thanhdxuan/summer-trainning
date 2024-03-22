@@ -1,9 +1,8 @@
 import React from 'react'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ColorModeContext, useMode } from './theme.js';
-import { CssBaseline, ThemeProvider, Divider } from '@mui/material';
-import { Routes, Route, redirect } from 'react-router-dom';
-import Topbar from './sences/global/TopBar.jsx';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
 import Home from './sences/home'
 import PostsPage from './sences/posts'
 import AdminPanel from './sences/admin/index.jsx';
@@ -15,6 +14,7 @@ import { Navigate } from 'react-router-dom';
 
 const App = () => {
   const [theme, colorMode] = useMode();
+  // eslint-disable-next-line
   const [loggedIn, setLoggedIn] = useState(false);
   var isAdmin = false;
   if (sessionStorage.getItem('user')) {

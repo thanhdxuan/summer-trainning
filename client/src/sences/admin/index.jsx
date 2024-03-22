@@ -1,12 +1,11 @@
-import { useTheme, Container, Divider, Box } from '@mui/material'
-import { tokens } from '../../theme';
+import { Container, Divider, Box } from '@mui/material'
 import NavigateBar from '../global/NavigateBar';
 import Topbar from '../global/TopBar';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import CreatePost from './tabs/CreatePosts';
 import CreateTopic from './tabs/CreateTopics';
 import UserControl from "./tabs/UserControl";
@@ -15,33 +14,35 @@ import axios from 'axios';
 import CreateQuestions from './tabs/CreateQuestions';
 
 const AdminPanel = () => {
-   const theme = useTheme();
-   const colors = tokens(theme.palette.mode);
    const [tabValue, setTabValue] = useState('1');
    const handleChange = (event, newValue) => {
       setTabValue(newValue);
    };
 
    const user = JSON.parse(sessionStorage.getItem('user'));
-   const header = {
-      'headers': {
-         "x-access-token": user.token
+   const header = useMemo(() => {
+      return {
+         'headers': {
+            "x-access-token": user.token
+         }
       }
-   };
+   }, [user.token]);
 
-   const getTopicData = async () => {
-      const formData = new FormData();
-      formData.append('public_id', user.uid);
-      return axios
-         .post('/topics', formData, header)
-         .then((res) => res.data);
-   };
+   const getTopicData = useCallback(
+      async () => {
+            const formData = new FormData();
+            formData.append('public_id', user.uid);
+            return axios
+               .post('/topics', formData, header)
+               .then((res) => res.data);
+      }, [user.uid, header]
+   )
 
-   const getPostData = async (topicId) => {
+   const getPostData = useCallback(async (topicId) => {
       return axios
             .get(`/topics/${topicId}/posts`, header)
             .then((res) => res.data);
-   };
+   }, [header]);
 
    const getQuestionData = async (postId) => {
       return axios

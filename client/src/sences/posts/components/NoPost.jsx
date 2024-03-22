@@ -9,6 +9,7 @@ const NoPost = ({ color }) => {
                style={{
                   width: 200
                }}
+               alt="Empty Page"
             />
          </Box>
          <Typography

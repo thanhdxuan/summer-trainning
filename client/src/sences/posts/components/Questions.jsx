@@ -5,7 +5,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import {
-   useTheme,
    Grid,
    FormControl,
    FormControlLabel,
@@ -17,7 +16,6 @@ import {
    IconButton
 } from '@mui/material';
 import { Typography } from '@mui/material';
-import { tokens } from '../../../theme';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
@@ -64,8 +62,6 @@ export default function ListQuestions({ questions, postId, setPostData, postData
    const [helperText, setHelperText] = useState('');
    const [formErrors, setFormErrors] = useState({});
    const [scroll, setScroll] = useState('paper');
-   const theme = useTheme();
-   const colors = tokens(theme.palette.mode);
    const user = JSON.parse(sessionStorage.getItem('user'));
    const handleClickOpen = (scrollType) => () => {
       setOpen(true);
@@ -90,7 +86,7 @@ export default function ListQuestions({ questions, postId, setPostData, postData
             setFormErrors({});
          }
       }
-   }, [open]);
+   }, [open, selectedOptions]);
 
 
    const handleRadioChange = (questionId, answer) => {
@@ -106,7 +102,7 @@ export default function ListQuestions({ questions, postId, setPostData, postData
 
       let correct = 0;
       var passed = false;
-      if (Object.keys(selectedOptions).length != questions.length) {
+      if (Object.keys(selectedOptions).length !== questions.length) {
          setHelperText('You need answer all questions!')
       }
 
@@ -124,7 +120,7 @@ export default function ListQuestions({ questions, postId, setPostData, postData
       } else {
          for (let i = 0; i < questions.length; i++) {
             console.log(questions[i].answer, selectedOptions[`question_${questions[i]._id}`]);
-            if (questions[i].answer == (parseInt(selectedOptions[`question_${questions[i]._id}`]) + 1)) {
+            if (questions[i].answer === (parseInt(selectedOptions[`question_${questions[i]._id}`]) + 1)) {
                correct = correct + 1;
             }
          }

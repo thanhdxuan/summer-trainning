@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Container, Chip, FormLabel, Grid, InputBase, InputLabel, MenuItem, Select } from "@mui/material";
+import { Container, Chip, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import { useTheme, Divider, FormControl } from '@mui/material';
 import { tokens } from '../../theme';
 import Header from '../../components/Header';
@@ -11,7 +11,6 @@ import SearchBar from './components/SearchBar';
 import Topbar from '../global/TopBar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import ChangePasswordDialog from '../../components/ChangePasswordDialog';
 
 const Home = () => {
    const theme = useTheme();
@@ -22,13 +21,15 @@ const Home = () => {
    const [fLevelValue, setFLevelValue] = useState(-1);
    const user = JSON.parse(sessionStorage.getItem("user"));
    const navigate = useNavigate();
-   const header = {
-      'headers': {
-         "x-access-token": user.token
+   const header = useMemo(() => {
+      return {
+         'headers': {
+            "x-access-token": user.token
+         }
       }
-   }
+   }, [user.token]);
 
-   const getTopicData = async () => {
+   const getTopicData = useCallback(async () => {
       const formData = new FormData();
       formData.append('public_id', user.uid);
       return axios
@@ -39,12 +40,12 @@ const Home = () => {
                navigate('/signin');
             }
          });
-   };
-   const getUserData = async () => {
+   }, [user.uid, header, navigate]);
+   const getUserData = useCallback(async () => {
       return axios
          .get(`/users/${user.uid}/status`, header)
          .then((res) => res.data);
-   };
+   }, [user.uid, header]);
 
    // eslint-disable-next-line
    useEffect(
@@ -55,8 +56,18 @@ const Home = () => {
          getUserData().then((data) => {
             setUserData(data);
          });
-      }, []
+      }, [getTopicData, getUserData]
    );
+
+   const handleFilter = useCallback(async (status, level) => {
+      const formData = new FormData();
+      formData.append('level', level);
+      formData.append('status', status);
+      formData.append('public_id', user.uid);
+      return axios
+         .post(`/filter/topics`, formData, header)
+         .then(res => res.data);
+   }, [user.uid, header]);
 
    useEffect(
       () => {
@@ -66,7 +77,7 @@ const Home = () => {
                console.log(data);
             })
             .catch(err => console.log(err));
-      }, [fLevelValue, fStatusValue]
+      }, [fLevelValue, fStatusValue, handleFilter]
    )
    const handleSearch = async (searchTerm) => {
       fetch(`/search/topics?name=${searchTerm}`)
@@ -77,15 +88,6 @@ const Home = () => {
          .catch(err => console.log(err))
    };
 
-   const handleFilter = async (status, level) => {
-      const formData = new FormData();
-      formData.append('level', level);
-      formData.append('status', status);
-      formData.append('public_id', user.uid);
-      return axios
-         .post(`/filter/topics`, formData, header)
-         .then(res => res.data);
-   };
 
    return (
       <>
